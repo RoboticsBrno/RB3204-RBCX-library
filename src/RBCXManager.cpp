@@ -1,46 +1,58 @@
 #include <driver/i2c.h>
+#include <driver/uart.h>
+#include <esp_log.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
-
-#include <esp_log.h>
 
 #include "RBCXBattery.h"
 #include "RBCXManager.h"
 
+#include "rbcx.pb.h"
+
 #define TAG "RBCXManager"
 
 #define MOTORS_FAILSAFE_PERIOD_MS 300
+#define MAX_COPROC_IDLE_MS 75
 
 namespace rb {
 
-Manager::Manager()
-    : m_queue(nullptr)
-    , m_piezo()
-    , m_leds()
-    , m_battery()
-    , m_servos() {}
+Manager::Manager() {}
 
-Manager::~Manager() {
-    if (m_queue) {
-        vQueueDelete(m_queue);
-    }
-}
+Manager::~Manager() {}
 
 void Manager::install(ManagerInstallFlags flags) {
-    if (m_queue) {
+    if (false) { // TODO
         ESP_LOGE(TAG,
             "The manager has already been installed, please make sure to only "
             "call install() once!");
         abort();
     }
 
-    m_queue = xQueueCreate(32, sizeof(struct Event));
-
     m_motors_last_set = 0;
     if (!(flags & MAN_DISABLE_MOTOR_FAILSAFE)) {
         schedule(MOTORS_FAILSAFE_PERIOD_MS,
             std::bind(&Manager::motorsFailSafe, this));
     }
+
+    const uart_config_t uart_config = {
+        .baud_rate = 921600,
+        .data_bits = UART_DATA_8_BITS,
+        .parity = UART_PARITY_DISABLE,
+        .stop_bits = UART_STOP_BITS_1,
+        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
+    };
+    ESP_ERROR_CHECK(uart_param_config(UART_NUM_2, &uart_config));
+    ESP_ERROR_CHECK(uart_set_pin(UART_NUM_2, GPIO_NUM_2, GPIO_NUM_0,
+        UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
+    ESP_ERROR_CHECK(uart_driver_install(UART_NUM_2, 1024, 1024, 0, NULL, 0));
+
+    m_coprocWatchdogTimer = timers().schedule(MAX_COPROC_IDLE_MS, [this]() -> bool {
+        CoprocReq msg = {
+            .which_payload = CoprocReq_ping_tag,
+        };
+        sendToCoproc(msg);
+        return true;
+    });
 
     TaskHandle_t task;
     xTaskCreate(&Manager::consumerRoutineTrampoline, "rbmanager_loop", 3072,
@@ -57,61 +69,53 @@ rb::SmartServoBus& Manager::initSmartServoBus(uint8_t servo_count) {
     return m_servos;
 }
 
-void Manager::queue(const Event* ev, bool toFront) {
-    if (!toFront) {
-        while (xQueueSendToBack(m_queue, ev, 0) != pdTRUE)
-            vTaskDelay(1);
-    } else {
-        while (xQueueSendToFront(m_queue, ev, 0) != pdTRUE)
-            vTaskDelay(1);
-    }
-}
-
-bool Manager::queueFromIsr(const Event* ev, bool toFront) {
-    BaseType_t woken = pdFALSE;
-    if (!toFront)
-        xQueueSendToBackFromISR(m_queue, ev, &woken);
-    else
-        xQueueSendToFrontFromISR(m_queue, ev, &woken);
-    return woken == pdTRUE;
-}
-
 void Manager::consumerRoutineTrampoline(void* cookie) {
     ((Manager*)cookie)->consumerRoutine();
 }
 
 void Manager::consumerRoutine() {
-    struct Event ev;
+
+    CoprocLinkParser<CoprocStat, &CoprocStat_msg> parser(m_codec);
+
     while (true) {
-        while (xQueueReceive(m_queue, &ev, portMAX_DELAY) == pdTRUE) {
-            processEvent(&ev);
+        uint8_t byte;
+        if (uart_read_bytes(UART_NUM_2, &byte, 1, portMAX_DELAY) != 1)
+            continue;
+
+        if (!parser.add(byte))
+            continue;
+
+        const auto& msg = parser.lastMessage();
+        switch (msg.which_payload) {
+        case CoprocStat_buttonsStat_tag:
+            printf("    Buttons: %x\n",
+                (int)msg.payload.buttonsStat.buttonsPressed);
+            m_buttons.setState(msg.payload.buttonsStat);
+            break;
+        case CoprocStat_ultrasoundStat_tag:
+            printf("    Ultrasounds: %u\n",
+                msg.payload.ultrasoundStat.roundtripMicrosecs);
+            break;
+        case CoprocStat_ledsStat_tag:
+        case CoprocStat_stupidServoStat_tag:
+            // Ignore
+            break;
+        default:
+            printf("    Unknown type %d\n", msg.which_payload);
+            break;
         }
     }
 }
 
-void Manager::processEvent(struct Manager::Event* ev) {
-    switch (ev->type) {
-    case EVENT_MOTORS: {
-        auto data = (std::vector<EventMotorsData>*)ev->data.motors;
-        bool changed = false;
-        for (const auto& m : *data) {
-            if ((m_motors[static_cast<int>(m.id)].get()->*m.setter_func)(
-                    m.value)) {
-                changed = true;
-            }
-        }
-        if (changed) {
-            // TODO
-        }
-        delete data;
+void Manager::sendToCoproc(const CoprocReq& msg) {
+    std::lock_guard<std::mutex> l(m_codecTxMutex);
+    
+    timers().reset(m_coprocWatchdogTimer, MAX_COPROC_IDLE_MS);
 
-        m_motors_last_set = xTaskGetTickCount();
-        break;
-    }
-    case EVENT_MOTORS_STOP_ALL: {
-        // TODO
-        break;
-    }
+    const auto len = m_codec.encodeWithHeader(
+        &CoprocReq_msg, &msg, m_txBuf, sizeof(m_txBuf));
+    if (len > 0) {
+        uart_write_bytes(UART_NUM_2, (const char*)m_txBuf, len);
     }
 }
 
@@ -121,8 +125,7 @@ bool Manager::motorsFailSafe() {
         if (now - m_motors_last_set
             > pdMS_TO_TICKS(MOTORS_FAILSAFE_PERIOD_MS)) {
             ESP_LOGE(TAG, "Motor failsafe triggered, stopping all motors!");
-            const Event ev = { .type = EVENT_MOTORS_STOP_ALL, .data = {} };
-            queue(&ev);
+            // TODO
             m_motors_last_set = 0;
         }
     }
@@ -156,13 +159,10 @@ bool Manager::printTasksDebugInfo() {
 #endif
 
 MotorChangeBuilder::MotorChangeBuilder(Manager& manager)
-    : m_manager(manager) {
-    m_values.reset(new std::vector<Manager::EventMotorsData>());
-}
+    : m_manager(manager) {}
 
 MotorChangeBuilder::MotorChangeBuilder(MotorChangeBuilder&& o)
-    : m_manager(o.m_manager)
-    , m_values(std::move(o.m_values)) {}
+    : m_manager(o.m_manager) {}
 
 MotorChangeBuilder::~MotorChangeBuilder() {}
 
@@ -183,13 +183,7 @@ MotorChangeBuilder& MotorChangeBuilder::stop(MotorId id) {
 }
 
 void MotorChangeBuilder::set(bool toFront) {
-    const Manager::Event ev = {
-        .type = Manager::EVENT_MOTORS,
-        .data = {
-            .motors = m_values.release(),
-        },
-    };
-    m_manager.queue(&ev, toFront);
+    // TODO
 }
 
 };

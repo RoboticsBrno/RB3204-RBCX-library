@@ -22,4 +22,57 @@ inline void delay(std::chrono::duration<uint32_t, std::milli> delay) {
     vTaskDelay(delay.count() / portTICK_PERIOD_MS);
 }
 
+#define RBCX_ENUM_IMPL_MASK_OPERATORS(T)                                       \
+    inline T operator|(T a, T b) {                                             \
+        return static_cast<T>(static_cast<int>(a) | static_cast<int>(b));      \
+    }                                                                          \
+                                                                               \
+    inline T operator&(T a, T b) {                                             \
+        return static_cast<T>(static_cast<int>(a) & static_cast<int>(b));      \
+    }                                                                          \
+                                                                               \
+    inline T operator^(T a, T b) {                                             \
+        return static_cast<T>(static_cast<int>(a) ^ static_cast<int>(b));      \
+    }                                                                          \
+                                                                               \
+    inline T operator|=(T& a, T b) {                                           \
+        return static_cast<T>(                                                 \
+            reinterpret_cast<int&>(a) |= static_cast<int>(b));                 \
+    }                                                                          \
+                                                                               \
+    inline T operator&=(T& a, T b) {                                           \
+        return static_cast<T>(                                                 \
+            reinterpret_cast<int&>(a) &= static_cast<int>(b));                 \
+    }                                                                          \
+                                                                               \
+    inline T operator^=(T& a, T b) {                                           \
+        return static_cast<T>(                                                 \
+            reinterpret_cast<int&>(a) ^= static_cast<int>(b));                 \
+    }                                                                          \
+                                                                               \
+    inline T operator~(T a) { return static_cast<T>(~static_cast<int>(a)); }   \
+                                                                               \
+    inline T operator<<=(T& a, int b) {                                        \
+        return static_cast<T>(                                                 \
+            reinterpret_cast<int&>(a) <<= static_cast<int>(b));                \
+    }                                                                          \
+                                                                               \
+    inline T operator>>=(T& a, int b) {                                        \
+        return static_cast<T>(                                                 \
+            reinterpret_cast<int&>(a) >>= static_cast<int>(b));                \
+    }                                                                          \
+                                                                               \
+    inline T operator<<(T a, int b) {                                          \
+        return static_cast<T>(static_cast<int>(a) << static_cast<int>(b));     \
+    }                                                                          \
+                                                                               \
+    inline T operator>>(T a, int b) {                                          \
+        return static_cast<T>(static_cast<int>(a) >> static_cast<int>(b));     \
+    }                                                                          \
+                                                                               \
+    T operator+=(T& a, T b) = delete;                                          \
+    T operator-=(T& a, T b) = delete;                                          \
+    T operator++(T a) = delete;                                                \
+    T operator--(T a) = delete;
+
 } // namespace rb

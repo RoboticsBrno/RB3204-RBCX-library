@@ -9,12 +9,16 @@
 #include <vector>
 
 #include "RBCXBattery.h"
+#include "RBCXButtons.h"
 #include "RBCXEncoder.h"
 #include "RBCXLeds.h"
 #include "RBCXMotor.h"
 #include "RBCXPiezo.h"
 #include "RBCXServo.h"
 #include "RBCXTimers.h"
+
+#include "coproc_link_parser.h"
+#include "rbcx.pb.h"
 
 namespace rb {
 
@@ -85,6 +89,7 @@ public:
         return m_battery;
     } //!< Get the {@link Battery} interface
     Leds& leds() { return m_leds; } //!< Get the {@link Leds} helper
+    const Buttons& buttons() const { return m_buttons; }
 
     Motor& motor(MotorId id) {
         return *m_motors[static_cast<int>(id)];
@@ -109,33 +114,14 @@ public:
     // internal api to monitor RBCX tasks
     void monitorTask(TaskHandle_t task);
 
+    void sendToCoproc(const CoprocReq& msg);
+
 private:
     Manager();
     ~Manager();
 
-    enum EventType {
-        EVENT_MOTORS,
-        EVENT_MOTORS_STOP_ALL,
-    };
-
-    struct EventMotorsData {
-        bool (Motor::*setter_func)(int8_t);
-        MotorId id;
-        int8_t value;
-    };
-
-    struct Event {
-        EventType type;
-        union {
-            std::vector<EventMotorsData>* motors;
-        } data;
-    };
-
-    void queue(const Event* event, bool toFront = false);
-    bool queueFromIsr(const Event* event, bool toFront = false);
     static void consumerRoutineTrampoline(void* cookie);
     void consumerRoutine();
-    void processEvent(struct Event* ev);
 
     bool motorsFailSafe();
 
@@ -146,13 +132,18 @@ private:
     std::mutex m_tasks_mutex;
 #endif
 
-    QueueHandle_t m_queue;
+    CoprocCodec m_codec;
+    uint8_t m_txBuf[CoprocCodec::MaxFrameSize];
+    std::mutex m_codecTxMutex;
+
+    uint16_t m_coprocWatchdogTimer;
 
     TickType_t m_motors_last_set;
     std::vector<std::unique_ptr<Motor>> m_motors;
 
     rb::Piezo m_piezo;
     rb::Leds m_leds;
+    rb::Buttons m_buttons;
     rb::Battery m_battery;
     rb::SmartServoBus m_servos;
 };
@@ -195,7 +186,6 @@ public:
 
 private:
     Manager& m_manager;
-    std::unique_ptr<std::vector<Manager::EventMotorsData>> m_values;
 };
 
 } // namespace rb
