@@ -46,13 +46,15 @@ void Manager::install(ManagerInstallFlags flags) {
         UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
     ESP_ERROR_CHECK(uart_driver_install(UART_NUM_2, 1024, 1024, 0, NULL, 0));
 
-    m_coprocWatchdogTimer = timers().schedule(MAX_COPROC_IDLE_MS, [this]() -> bool {
-        CoprocReq msg = {
-            .which_payload = CoprocReq_ping_tag,
-        };
-        sendToCoproc(msg);
-        return true;
-    });
+    m_coprocWatchdogTimer
+        = timers().schedule(MAX_COPROC_IDLE_MS, [this]() -> bool {
+              sendToCoproc(CoprocReq {
+                  .which_payload = CoprocReq_ping_tag,
+              });
+              return true;
+          });
+
+    sendToCoproc(CoprocReq { .which_payload = CoprocReq_getButtons_tag });
 
     TaskHandle_t task;
     xTaskCreate(&Manager::consumerRoutineTrampoline, "rbmanager_loop", 3072,
@@ -109,7 +111,7 @@ void Manager::consumerRoutine() {
 
 void Manager::sendToCoproc(const CoprocReq& msg) {
     std::lock_guard<std::mutex> l(m_codecTxMutex);
-    
+
     timers().reset(m_coprocWatchdogTimer, MAX_COPROC_IDLE_MS);
 
     const auto len = m_codec.encodeWithHeader(
