@@ -28,6 +28,10 @@ void Manager::install(ManagerInstallFlags flags) {
         abort();
     }
 
+    for (int i = 0; i < UltrasoundsCount; ++i) {
+        m_ultrasounds[i].setIndex(i);
+    }
+
     m_motors_last_set = 0;
     if (!(flags & MAN_DISABLE_MOTOR_FAILSAFE)) {
         schedule(MOTORS_FAILSAFE_PERIOD_MS,
@@ -49,7 +53,7 @@ void Manager::install(ManagerInstallFlags flags) {
     m_coprocWatchdogTimer
         = timers().schedule(MAX_COPROC_IDLE_MS, [this]() -> bool {
               sendToCoproc(CoprocReq {
-                  .which_payload = CoprocReq_ping_tag,
+                  .which_payload = CoprocReq_keepalive_tag,
               });
               return true;
           });
@@ -94,10 +98,12 @@ void Manager::consumerRoutine() {
                 (int)msg.payload.buttonsStat.buttonsPressed);
             m_buttons.setState(msg.payload.buttonsStat);
             break;
-        case CoprocStat_ultrasoundStat_tag:
-            printf("    Ultrasounds: %u\n",
-                msg.payload.ultrasoundStat.roundtripMicrosecs);
+        case CoprocStat_ultrasoundStat_tag: {
+            const auto& p = msg.payload.ultrasoundStat;
+            if (p.utsIndex >= 0 && p.utsIndex < UltrasoundsCount)
+                m_ultrasounds[p.utsIndex].onMeasuringDone(p);
             break;
+        }
         case CoprocStat_ledsStat_tag:
         case CoprocStat_stupidServoStat_tag:
             // Ignore

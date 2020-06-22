@@ -16,6 +16,7 @@
 #include "RBCXPiezo.h"
 #include "RBCXServo.h"
 #include "RBCXTimers.h"
+#include "RBCXUltrasound.h"
 
 #include "coproc_link_parser.h"
 #include "rbcx.pb.h"
@@ -84,6 +85,8 @@ public:
      */
     SmartServoBus& servoBus() { return m_servos; };
 
+    Ultrasound& ultrasound(uint8_t index) { return m_ultrasounds[index]; }
+
     Piezo& piezo() { return m_piezo; } //!< Get the {@link Piezo} controller
     Battery& battery() {
         return m_battery;
@@ -146,6 +149,7 @@ private:
     rb::Buttons m_buttons;
     rb::Battery m_battery;
     rb::SmartServoBus m_servos;
+    rb::Ultrasound m_ultrasounds[UltrasoundsCount];
 };
 
 /**

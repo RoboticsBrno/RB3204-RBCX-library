@@ -18,4 +18,6 @@ inline MotorId operator++(MotorId& x) {
     return x = MotorId(static_cast<uint8_t>(x) + 1);
 }
 
+static constexpr int UltrasoundsCount = 4;
+
 } // namespace rb
