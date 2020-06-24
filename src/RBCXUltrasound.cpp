@@ -87,7 +87,7 @@ void Ultrasound::recalculateLastDistanceLocked() {
         return;
     }
 
-    m_lastDistanceMm = uint32_t(m_speedOfSound * (float(m_lastUs) / 100.f)) / 2;
+    m_lastDistanceMm = uint32_t(m_speedOfSound * (float(m_lastUs) / 10.f)) / 2;
 }
 
 };
