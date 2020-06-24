@@ -48,7 +48,7 @@ void Manager::install(ManagerInstallFlags flags) {
     ESP_ERROR_CHECK(uart_param_config(UART_NUM_2, &uart_config));
     ESP_ERROR_CHECK(uart_set_pin(UART_NUM_2, GPIO_NUM_2, GPIO_NUM_0,
         UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
-    ESP_ERROR_CHECK(uart_driver_install(UART_NUM_2, 1024, 1024, 0, NULL, 0));
+    ESP_ERROR_CHECK(uart_driver_install(UART_NUM_2, 1024, 0, 0, NULL, 0));
 
     m_coprocWatchdogTimer
         = timers().schedule(MAX_COPROC_IDLE_MS, [this]() -> bool {
@@ -85,8 +85,10 @@ void Manager::consumerRoutine() {
 
     while (true) {
         uint8_t byte;
-        if (uart_read_bytes(UART_NUM_2, &byte, 1, portMAX_DELAY) != 1)
+        if (uart_read_bytes(UART_NUM_2, &byte, 1, portMAX_DELAY) != 1) {
+            ESP_LOGE(TAG, "Invalid uart read\n");
             continue;
+        }
 
         if (!parser.add(byte))
             continue;
@@ -116,15 +118,15 @@ void Manager::consumerRoutine() {
 }
 
 void Manager::sendToCoproc(const CoprocReq& msg) {
-    std::lock_guard<std::mutex> l(m_codecTxMutex);
-
-    timers().reset(m_coprocWatchdogTimer, MAX_COPROC_IDLE_MS);
-
+    m_codecTxMutex.lock();
     const auto len = m_codec.encodeWithHeader(
         &CoprocReq_msg, &msg, m_txBuf, sizeof(m_txBuf));
     if (len > 0) {
         uart_write_bytes(UART_NUM_2, (const char*)m_txBuf, len);
     }
+    m_codecTxMutex.unlock();
+
+    timers().reset(m_coprocWatchdogTimer, MAX_COPROC_IDLE_MS);
 }
 
 bool Manager::motorsFailSafe() {

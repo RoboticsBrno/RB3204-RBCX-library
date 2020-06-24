@@ -35,6 +35,7 @@ public:
 
     bool reset(uint16_t id, uint32_t period_ms);
     bool cancel(uint16_t id);
+    bool stop(uint16_t id);
 
 private:
     struct timer_t {

@@ -1,6 +1,10 @@
-#include "RBCXUltrasound.h"
+#include <esp_log.h>
+
 #include "RBCXManager.h"
+#include "RBCXUltrasound.h"
 #include "rbcx.pb.h"
+
+#define TAG "RBCXUltrasound"
 
 namespace rb {
 
@@ -9,7 +13,17 @@ Ultrasound::Ultrasound()
     , m_lastUs(0)
     , m_lastDistanceMm(0)
     , m_speedOfSound(defaultSpeedOfSound / 100.f)
-    , m_measuring(false) {}
+    , m_measuring(false)
+    , m_timeoutTimer(0) {
+
+    m_timeoutTimer = Timers::get().schedule(0xFFFFFFFF, [this]() -> bool {
+        ESP_LOGE(TAG, "Ultrasound response timeout!\n");
+        onMeasuringDone(CoprocStat_UltrasoundStat { 0 });
+        return false;
+    });
+
+    Timers::get().stop(m_timeoutTimer);
+}
 
 Ultrasound::~Ultrasound() {}
 
@@ -21,7 +35,7 @@ void Ultrasound::setSpeedOfSound(float speedOfSoundInMetersPerSecond) {
 }
 
 void Ultrasound::measureAsync(std::function<void(uint32_t)> callback) {
-    std::unique_lock<std::recursive_mutex> ul(m_mutex);
+    std::lock_guard<std::recursive_mutex> ul(m_mutex);
 
     if (!m_measuring) {
         m_measuring = true;
@@ -32,6 +46,7 @@ void Ultrasound::measureAsync(std::function<void(uint32_t)> callback) {
                         .utsIndex = m_index,
                         .which_utsCmd = CoprocReq_UltrasoundReq_singlePing_tag,
                     } } });
+        Timers::get().reset(m_timeoutTimer, 250);
     }
 
     if (callback)
@@ -50,13 +65,14 @@ void Ultrasound::onMeasuringDone(const CoprocStat_UltrasoundStat& result) {
     uint32_t distance;
 
     {
-        std::unique_lock<std::recursive_mutex> ul(m_mutex);
+        std::lock_guard<std::recursive_mutex> ul(m_mutex);
 
         m_lastUs = result.roundtripMicrosecs;
         recalculateLastDistanceLocked();
         distance = m_lastDistanceMm;
         m_measuring = false;
         m_callbacks.swap(callbacks);
+        Timers::get().stop(m_timeoutTimer);
         m_measuringDone.notify_all();
     }
 

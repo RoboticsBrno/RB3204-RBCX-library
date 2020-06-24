@@ -94,6 +94,18 @@ bool Timers::cancel(uint16_t id) {
     return false;
 }
 
+bool Timers::stop(uint16_t id) {
+    std::lock_guard<std::recursive_mutex> l(m_mutex);
+
+    for (auto& t : m_timers) {
+        if (t.id != id)
+            continue;
+        esp_timer_stop(t.handle);
+        return true;
+    }
+    return false;
+}
+
 void Timers::cancelByIdxLocked(size_t idx) {
     auto& t = m_timers[idx];
     esp_timer_stop(t.handle);

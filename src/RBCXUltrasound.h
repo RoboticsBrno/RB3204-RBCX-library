@@ -6,6 +6,8 @@
 #include <stdint.h>
 #include <vector>
 
+#include "RBCXTimers.h"
+
 #include "rbcx.pb.h"
 
 namespace rb {
@@ -30,7 +32,6 @@ public:
     float getSpeedOfSound() const { return m_speedOfSound; }
 
     void measureAsync(callback_t callback = callback_t());
-
     uint32_t measure();
 
 private:
@@ -52,6 +53,7 @@ private:
     std::vector<callback_t> m_callbacks;
     std::recursive_mutex m_mutex;
     std::condition_variable_any m_measuringDone;
+    uint16_t m_timeoutTimer;
 };
 
 };
