@@ -11,13 +11,16 @@ class Piezo {
     friend class Manager;
 
 public:
-    void start();
-    void stop();
+    void start() { setState(true); }
+    void stop() { setState(false); }
+
+    void setState(bool on);
 
 private:
     Piezo();
     Piezo(const Piezo&) = delete;
     ~Piezo();
-};
 
+    bool m_on;
+};
 };
