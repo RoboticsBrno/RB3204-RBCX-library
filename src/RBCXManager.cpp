@@ -23,8 +23,8 @@ Manager::~Manager() {}
 void Manager::install(ManagerInstallFlags flags) {
     if (false) { // TODO
         ESP_LOGE(TAG,
-            "The manager has already been installed, please make sure to only "
-            "call install() once!");
+            "The manager has already been installed, please make sure to "
+            "only call install() once!");
         abort();
     }
 
@@ -50,13 +50,11 @@ void Manager::install(ManagerInstallFlags flags) {
         UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
     ESP_ERROR_CHECK(uart_driver_install(UART_NUM_2, 1024, 0, 0, NULL, 0));
 
-    m_coprocWatchdogTimer
-        = timers().schedule(MAX_COPROC_IDLE_MS, [this]() -> bool {
-              sendToCoproc(CoprocReq {
-                  .which_payload = CoprocReq_keepalive_tag,
-              });
-              return true;
-          });
+    // The esp_timer (-> rb::Timers) task runs pinned on core 0, which gets stalled
+    // for ~700 ms(?!) when connecting to a WiFi network, so it can't be used
+    // for this watchdog.
+    xTaskCreate(&Manager::keepaliveRoutine, "rbmanager_keepalive", 1024, this,
+        10, &m_keepaliveTask);
 
     sendToCoproc(CoprocReq { .which_payload = CoprocReq_getButtons_tag });
 
@@ -117,6 +115,19 @@ void Manager::consumerRoutine() {
     }
 }
 
+void Manager::keepaliveRoutine(void* cookie) {
+    auto& man = *((Manager*)cookie);
+
+    while (true) {
+        if (xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(MAX_COPROC_IDLE_MS))
+            == pdFALSE) {
+            man.sendToCoproc(CoprocReq {
+                .which_payload = CoprocReq_keepalive_tag,
+            });
+        }
+    }
+}
+
 void Manager::sendToCoproc(const CoprocReq& msg) {
     m_codecTxMutex.lock();
     const auto len = m_codec.encodeWithHeader(
@@ -126,7 +137,7 @@ void Manager::sendToCoproc(const CoprocReq& msg) {
     }
     m_codecTxMutex.unlock();
 
-    timers().reset(m_coprocWatchdogTimer, MAX_COPROC_IDLE_MS);
+    xTaskNotify(m_keepaliveTask, 0, eNoAction);
 }
 
 bool Manager::motorsFailSafe() {
@@ -195,5 +206,4 @@ MotorChangeBuilder& MotorChangeBuilder::stop(MotorId id) {
 void MotorChangeBuilder::set(bool toFront) {
     // TODO
 }
-
 };

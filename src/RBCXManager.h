@@ -126,6 +126,8 @@ private:
     static void consumerRoutineTrampoline(void* cookie);
     void consumerRoutine();
 
+    static void keepaliveRoutine(void* cookie);
+
     bool motorsFailSafe();
 
 #ifdef RB_DEBUG_MONITOR_TASKS
@@ -134,6 +136,8 @@ private:
     std::vector<TaskHandle_t> m_tasks;
     std::mutex m_tasks_mutex;
 #endif
+
+    TaskHandle_t m_keepaliveTask;
 
     CoprocCodec m_codec;
     uint8_t m_txBuf[CoprocCodec::MaxFrameSize];
