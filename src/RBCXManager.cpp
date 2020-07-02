@@ -53,7 +53,7 @@ void Manager::install(ManagerInstallFlags flags) {
     // The esp_timer (-> rb::Timers) task runs pinned on core 0, which gets stalled
     // for ~700 ms(?!) when connecting to a WiFi network, so it can't be used
     // for this watchdog.
-    xTaskCreate(&Manager::keepaliveRoutine, "rbmanager_keepalive", 1024, this,
+    xTaskCreate(&Manager::keepaliveRoutine, "rbmanager_keepalive", 1536, this,
         10, &m_keepaliveTask);
 
     sendToCoproc(CoprocReq { .which_payload = CoprocReq_getButtons_tag });
@@ -94,8 +94,6 @@ void Manager::consumerRoutine() {
         const auto& msg = parser.lastMessage();
         switch (msg.which_payload) {
         case CoprocStat_buttonsStat_tag:
-            printf("    Buttons: %x\n",
-                (int)msg.payload.buttonsStat.buttonsPressed);
             m_buttons.setState(msg.payload.buttonsStat);
             break;
         case CoprocStat_ultrasoundStat_tag: {
@@ -104,12 +102,17 @@ void Manager::consumerRoutine() {
                 m_ultrasounds[p.utsIndex].onMeasuringDone(p);
             break;
         }
+        case CoprocStat_powerAdcStat_tag:
+            m_battery.setState(msg.payload.powerAdcStat);
+            break;
+
         case CoprocStat_ledsStat_tag:
         case CoprocStat_stupidServoStat_tag:
             // Ignore
             break;
         default:
-            printf("    Unknown type %d\n", msg.which_payload);
+            printf("Received message of unknown type from stm32: %d\n",
+                msg.which_payload);
             break;
         }
     }

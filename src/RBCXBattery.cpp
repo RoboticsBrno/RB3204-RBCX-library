@@ -11,19 +11,13 @@ Battery::Battery() {}
 
 Battery::~Battery() {}
 
-void Battery::shutdown() {
+void Battery::shutdown() { 
     ESP_LOGW(TAG, "Shutting down.");
 
-    vTaskDelay(pdMS_TO_TICKS(500));
-
-    // TODO
-
-    // Shut down nearly everything and never wake up - necessary when ESP is
-    // powered from USB
-    esp_deep_sleep_start();
-}
-
-uint32_t Battery::voltageMv() const { return m_voltageMv.load(); }
+    Manager::get().sendToCoproc(CoprocReq {
+        .which_payload = CoprocReq_shutdownPower_tag,
+    });
+ }
 
 uint32_t Battery::pct() const {
     const auto mv = voltageMv();
