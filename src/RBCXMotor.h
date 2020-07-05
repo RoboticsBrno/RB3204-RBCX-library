@@ -9,6 +9,8 @@
 #include "RBCXPinout.h"
 #include "RBCXUtil.h"
 
+#include "rbcx.pb.h"
+
 namespace rb {
 
 class Manager;
@@ -21,13 +23,26 @@ class Motor {
 public:
     /**
      * \brief Set motor power.
-     * \param power of the motor <-100 - 100>
+     * \param power of the motor <-32768; 32767>
      */
-    void power(int8_t value);
+    void power(int16_t value);
+
+    /**
+     * \brief Set motor speed
+     * \param ticksPerSecond speed of the motor <-32768; 32767>
+     */
+    void speed(int16_t ticksPerSecond);
+
+    /**
+     * \brief Start braking.
+     * \param brakingPower braking power in <0, 32767>
+     */
+    void brake(uint16_t brakingPower);
 
     /**
      * \brief Limit the maximum PWM value. If you call pwmMaxPercent(70) and then
-     * power(100), the motors will spin at 70% of maximum speed.
+     * power(100), the motors will spin at 70% of maximum speed. This scales both the power
+     * and speed set through Motor.
      * \param pct of the max value <0 - 100>
      */
     void pwmMaxPercent(int8_t percent);
@@ -36,11 +51,6 @@ public:
      * \brief Get current maximum PWM percent value.
      */
     int8_t pwmMaxPercent() const { return m_pwm_max_percent; }
-
-    /**
-     * \brief Stop motor.
-     */
-    void stop();
 
     /**
      * \brief Drive motor to set position (according absolute value). See {@link Encoder::driveToValue}.
@@ -56,24 +66,33 @@ public:
     /**
      * \brief Get the Encoder instance for this motor. See {@link Encoder}.
      */
-    Encoder* encoder();
+    Encoder& encoder() { return m_encoder; }
 
     /**
      * \brief Get the Encoder instance for this motor. Same as {@link encoder}.
      */
-    Encoder* enc() { return encoder(); }
+    Encoder& enc() { return encoder(); }
 
 private:
-    Motor(Manager& man, MotorId id);
+    Motor();
     Motor(const Motor&) = delete;
 
-    Manager& m_man;
-    MotorId m_id;
+    void setId(MotorId id) {
+        m_id = id;
+        m_encoder.setId(id);
+    }
 
+    void sendMotorReq(const CoprocReq_MotorReq& req);
+
+    int16_t scale(int16_t val);
+
+    Encoder m_encoder;
+    CoprocReq_MotorReq m_lastReq;
     std::mutex m_mutex;
-    std::unique_ptr<Encoder> m_encoder;
-    int8_t m_power;
+    MotorId m_id;
     int8_t m_pwm_max_percent;
+    int16_t m_power;
+    int16_t m_speed;
 };
 
 } // namespace rb

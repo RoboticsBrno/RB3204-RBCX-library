@@ -58,10 +58,11 @@ public:
     float speed();
 
 private:
-    Encoder(Manager& man, MotorId id);
+    Encoder();
     Encoder(const Encoder&) = delete;
 
-    Manager& m_manager;
+    void setId(MotorId id) { m_id = id; }
+
     MotorId m_id;
 };
 

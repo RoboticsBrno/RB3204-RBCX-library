@@ -29,10 +29,14 @@ void Leds::byId(LedId id, bool on) {
         return;
     m_ledsOn = newState;
 
-    const CoprocReq req = { .which_payload = CoprocReq_setLeds_tag,
-        .payload = { .setLeds = {
-                         .ledsOn = (CoprocReq_LedsEnum)newState,
-                     } } };
+    const CoprocReq req = {
+        .which_payload = CoprocReq_setLeds_tag,
+        .payload = {
+            .setLeds = {
+                .ledsOn = (CoprocReq_LedsEnum)newState,
+            }
+        },
+    };
 
     Manager::get().sendToCoproc(req);
 }

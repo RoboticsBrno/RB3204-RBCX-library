@@ -74,7 +74,7 @@ public:
     void install(ManagerInstallFlags flags = MAN_NONE);
 
     /**
-     * \brief Initialize the UART servo bus for intelligent servos LX-16.
+     * \brief Initialize the UART servo bus for intelligent servos LX-16. TODO: smart servos not implemented!
      * \return Instance of the class {@link SmartServoBus} which manage the intelligent servos.
      */
     SmartServoBus& initSmartServoBus(uint8_t servo_count);
@@ -95,7 +95,7 @@ public:
     const Buttons& buttons() const { return m_buttons; }
 
     Motor& motor(MotorId id) {
-        return *m_motors[static_cast<int>(id)];
+        return m_motors[static_cast<int>(id)];
     }; //!< Get a motor instance
     MotorChangeBuilder
     setMotors(); //!< Create motor power change builder: {@link MotorChangeBuilder}.
@@ -146,7 +146,7 @@ private:
     uint16_t m_coprocWatchdogTimer;
 
     TickType_t m_motors_last_set;
-    std::vector<std::unique_ptr<Motor>> m_motors;
+    Motor m_motors[size_t(MotorId::MAX)];
 
     rb::Piezo m_piezo;
     rb::Leds m_leds;
@@ -161,7 +161,7 @@ private:
  */
 class MotorChangeBuilder {
 public:
-    MotorChangeBuilder(Manager& manager);
+    MotorChangeBuilder();
     MotorChangeBuilder(const MotorChangeBuilder& o) = delete;
     MotorChangeBuilder(MotorChangeBuilder&& o);
     ~MotorChangeBuilder();
@@ -169,9 +169,23 @@ public:
     /**
      * \brief Set single motor power.
      * \param id of the motor (e.g. rb:MotorId::M1)
-     * \param power of the motor <-100 - 100>
+     * \param power of the motor <-32768; 32767>
      **/
-    MotorChangeBuilder& power(MotorId id, int8_t value);
+    MotorChangeBuilder& power(MotorId id, int16_t value);
+
+    /**
+     * \brief Set single motor power.
+     * \param id of the motor (e.g. rb:MotorId::M1)
+     * \param speed of the motor in encoder ticks <-32768; 32767>
+     **/
+    MotorChangeBuilder& speed(MotorId id, int16_t ticksPerSecond);
+
+    /**
+     * \brief Start braking.
+     * \param id of the motor (e.g. rb:MotorId::M1)
+     * \param brakingPower power of the braking, <0, 32767>
+     **/
+    MotorChangeBuilder& brake(MotorId id, uint16_t brakingPower);
 
     /**
      * \brief Limit motor index's power to percent.
@@ -181,19 +195,12 @@ public:
     MotorChangeBuilder& pwmMaxPercent(MotorId id, int8_t percent);
 
     /**
-     * \brief Stop motor.
-     * \param id of the motor (e.g. rb:MotorId::M1)
-     **/
-    MotorChangeBuilder& stop(MotorId id);
-
-    /**
      * \brief Finish the changes and submit the events.
-     * \param toFront add this event to front of the event queue
      **/
-    void set(bool toFront = false);
+    void set();
 
 private:
-    Manager& m_manager;
+    std::vector<std::function<void()>> m_calls;
 };
 
 } // namespace rb

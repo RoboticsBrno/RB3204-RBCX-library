@@ -32,6 +32,10 @@ void Manager::install(ManagerInstallFlags flags) {
         m_ultrasounds[i].setIndex(i);
     }
 
+    for (MotorId id = MotorId::M1; id < MotorId::MAX; ++id) {
+        m_motors[size_t(id)].setId(id);
+    }
+
     m_motors_last_set = 0;
     if (!(flags & MAN_DISABLE_MOTOR_FAILSAFE)) {
         schedule(MOTORS_FAILSAFE_PERIOD_MS,
@@ -56,6 +60,7 @@ void Manager::install(ManagerInstallFlags flags) {
     xTaskCreate(&Manager::keepaliveRoutine, "rbmanager_keepalive", 1536, this,
         10, &m_keepaliveTask);
 
+    sendToCoproc(CoprocReq { .which_payload = CoprocReq_versionReq_tag });
     sendToCoproc(CoprocReq { .which_payload = CoprocReq_getButtons_tag });
 
     TaskHandle_t task;
@@ -105,6 +110,12 @@ void Manager::consumerRoutine() {
         case CoprocStat_powerAdcStat_tag:
             m_battery.setState(msg.payload.powerAdcStat);
             break;
+        case CoprocStat_versionStat_tag: {
+            const auto& p = msg.payload.versionStat;
+            printf("STM32 FW version: %06x %.8s%s\n", p.number, p.revision,
+                p.dirty ? "-dirty" : "");
+            break;
+        }
 
         case CoprocStat_ledsStat_tag:
         case CoprocStat_stupidServoStat_tag:
@@ -156,7 +167,7 @@ bool Manager::motorsFailSafe() {
     return true;
 }
 
-MotorChangeBuilder Manager::setMotors() { return MotorChangeBuilder(*this); }
+MotorChangeBuilder Manager::setMotors() { return MotorChangeBuilder(); }
 
 void Manager::monitorTask(TaskHandle_t task) {
 #ifdef RB_DEBUG_MONITOR_TASKS
@@ -182,31 +193,43 @@ bool Manager::printTasksDebugInfo() {
 }
 #endif
 
-MotorChangeBuilder::MotorChangeBuilder(Manager& manager)
-    : m_manager(manager) {}
+MotorChangeBuilder::MotorChangeBuilder() {}
 
 MotorChangeBuilder::MotorChangeBuilder(MotorChangeBuilder&& o)
-    : m_manager(o.m_manager) {}
+    : m_calls(std::move(o.m_calls)) {}
 
 MotorChangeBuilder::~MotorChangeBuilder() {}
 
-MotorChangeBuilder& MotorChangeBuilder::power(MotorId id, int8_t value) {
-    // TODO
+MotorChangeBuilder& MotorChangeBuilder::power(MotorId id, int16_t value) {
+    m_calls.emplace_back([=]() { Manager::get().motor(id).power(value); });
+    return *this;
+}
+
+MotorChangeBuilder& MotorChangeBuilder::speed(
+    MotorId id, int16_t ticksPerSecond) {
+    m_calls.emplace_back(
+        [=]() { Manager::get().motor(id).speed(ticksPerSecond); });
     return *this;
 }
 
 MotorChangeBuilder& MotorChangeBuilder::pwmMaxPercent(
     MotorId id, int8_t percent) {
-    // TODO
+    m_calls.emplace_back(
+        [=]() { Manager::get().motor(id).pwmMaxPercent(percent); });
     return *this;
 }
 
-MotorChangeBuilder& MotorChangeBuilder::stop(MotorId id) {
-    // TODO
+MotorChangeBuilder& MotorChangeBuilder::brake(
+    MotorId id, uint16_t brakingPower) {
+    m_calls.emplace_back(
+        [=]() { Manager::get().motor(id).brake(brakingPower); });
     return *this;
 }
 
-void MotorChangeBuilder::set(bool toFront) {
-    // TODO
+void MotorChangeBuilder::set() {
+    for (const auto& c : m_calls) {
+        c();
+    }
+    m_calls.clear();
 }
 };

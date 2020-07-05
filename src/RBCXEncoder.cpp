@@ -11,14 +11,7 @@
 
 namespace rb {
 
-Encoder::Encoder(rb::Manager& man, rb::MotorId id)
-    : m_manager(man)
-    , m_id(id) {
-    if (m_id >= MotorId::MAX) {
-        ESP_LOGE(TAG, "Invalid encoder index %d, using 0 instead.", (int)m_id);
-        m_id = MotorId::M1;
-    }
-}
+Encoder::Encoder() {}
 
 Encoder::~Encoder() {}
 

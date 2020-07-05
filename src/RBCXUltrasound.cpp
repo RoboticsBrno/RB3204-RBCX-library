@@ -39,13 +39,15 @@ void Ultrasound::measureAsync(std::function<void(uint32_t)> callback) {
 
     if (!m_measuring) {
         m_measuring = true;
-        Manager::get().sendToCoproc(
-            CoprocReq { .which_payload = CoprocReq_ultrasoundReq_tag,
-                .payload
-                = { .ultrasoundReq = {
-                        .utsIndex = m_index,
-                        .which_utsCmd = CoprocReq_UltrasoundReq_singlePing_tag,
-                    } } });
+        Manager::get().sendToCoproc(CoprocReq {
+            .which_payload = CoprocReq_ultrasoundReq_tag,
+            .payload = {
+                .ultrasoundReq = {
+                    .utsIndex = m_index,
+                    .which_utsCmd = CoprocReq_UltrasoundReq_singlePing_tag,
+                },
+            },
+        });
         Timers::get().reset(m_timeoutTimer, 250);
     }
 
