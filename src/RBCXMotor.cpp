@@ -64,6 +64,8 @@ int16_t Motor::scale(int16_t val) {
 void Motor::sendMotorReq(const CoprocReq_MotorReq& req) {
     std::lock_guard<std::mutex> l(m_mutex);
 
+    Manager::get().resetMotorsFailSafe();
+
     if (memcmp(&m_lastReq, &req, sizeof(CoprocReq_MotorReq)) == 0)
         return;
     memcpy(&m_lastReq, &req, sizeof(CoprocReq_MotorReq));

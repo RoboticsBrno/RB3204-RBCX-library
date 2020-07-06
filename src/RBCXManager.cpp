@@ -154,13 +154,17 @@ void Manager::sendToCoproc(const CoprocReq& msg) {
     xTaskNotify(m_keepaliveTask, 0, eNoAction);
 }
 
+void Manager::resetMotorsFailSafe() { m_motors_last_set = xTaskGetTickCount(); }
+
 bool Manager::motorsFailSafe() {
     if (m_motors_last_set != 0) {
         const auto now = xTaskGetTickCount();
         if (now - m_motors_last_set
             > pdMS_TO_TICKS(MOTORS_FAILSAFE_PERIOD_MS)) {
             ESP_LOGE(TAG, "Motor failsafe triggered, stopping all motors!");
-            // TODO
+            for (auto& m : m_motors) {
+                m.power(0);
+            }
             m_motors_last_set = 0;
         }
     }

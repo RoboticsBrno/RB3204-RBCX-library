@@ -50,6 +50,7 @@ class Manager {
     friend class MotorChangeBuilder;
     friend class Encoder;
     friend class PcntInterruptHandler;
+    friend class Motor;
 
 public:
     Manager(Manager const&) = delete;
@@ -128,6 +129,7 @@ private:
 
     static void keepaliveRoutine(void* cookie);
 
+    void resetMotorsFailSafe();
     bool motorsFailSafe();
 
 #ifdef RB_DEBUG_MONITOR_TASKS
