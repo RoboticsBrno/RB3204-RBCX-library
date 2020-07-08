@@ -1,5 +1,9 @@
 #pragma once
 
+#include <functional>
+#include <mutex>
+#include <vector>
+
 #include "RBCXUtil.h"
 
 #include "rbcx.pb.h"
@@ -15,7 +19,7 @@ namespace rb {
  * \brief Helper class for controlling the LEDs connected to the expander.
  */
 
-enum ButtonId {
+enum ButtonId : uint32_t {
     Off = CoprocStat_ButtonsEnum_BOFF,
     On = CoprocStat_ButtonsEnum_BON,
 
@@ -36,13 +40,19 @@ class Buttons {
     friend class Manager;
 
 public:
-    bool byId(ButtonId id) const;
-    bool up() const { return byId(ButtonId::Up); }
-    bool down() const { return byId(ButtonId::Down); }
-    bool left() const { return byId(ButtonId::Left); }
-    bool right() const { return byId(ButtonId::Right); }
-    bool on() const { return byId(ButtonId::On); }
-    bool off() const { return byId(ButtonId::Off); }
+    typedef std::function<bool(ButtonId, bool)> callback_t;
+
+    static constexpr uint32_t Count = 6;
+
+    inline bool byId(ButtonId id) const { return (m_buttonsSet & id) != 0; };
+    inline bool up() const { return byId(ButtonId::Up); }
+    inline bool down() const { return byId(ButtonId::Down); }
+    inline bool left() const { return byId(ButtonId::Left); }
+    inline bool right() const { return byId(ButtonId::Right); }
+    inline bool on() const { return byId(ButtonId::On); }
+    inline bool off() const { return byId(ButtonId::Off); }
+
+    void onChange(callback_t callback);
 
 private:
     Buttons();
@@ -51,7 +61,8 @@ private:
 
     void setState(const CoprocStat_ButtonsStat& msg);
 
+    std::vector<callback_t> m_callbacks;
+    std::recursive_mutex m_mutex;
     ButtonId m_buttonsSet;
 };
-
 };

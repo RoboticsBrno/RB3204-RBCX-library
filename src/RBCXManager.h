@@ -93,7 +93,7 @@ public:
         return m_battery;
     } //!< Get the {@link Battery} interface
     Leds& leds() { return m_leds; } //!< Get the {@link Leds} helper
-    const Buttons& buttons() const { return m_buttons; }
+    Buttons& buttons() { return m_buttons; }
 
     Motor& motor(MotorId id) {
         return m_motors[static_cast<int>(id)];
