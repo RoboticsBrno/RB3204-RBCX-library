@@ -16,12 +16,13 @@
 
 namespace rb {
 
-Manager::Manager() {}
+Manager::Manager()
+    : m_keepaliveTask(nullptr) {}
 
 Manager::~Manager() {}
 
 void Manager::install(ManagerInstallFlags flags) {
-    if (false) { // TODO
+    if (m_keepaliveTask != nullptr) {
         ESP_LOGE(TAG,
             "The manager has already been installed, please make sure to "
             "only call install() once!");

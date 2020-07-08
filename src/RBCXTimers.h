@@ -37,6 +37,9 @@ public:
     bool cancel(uint16_t id);
     bool stop(uint16_t id);
 
+    // returns true if the calling code is running in the timer task.
+    bool isOnTimerTask() const;
+
 private:
     struct timer_t {
         std::function<bool()> callback;

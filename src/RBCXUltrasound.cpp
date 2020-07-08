@@ -56,6 +56,12 @@ void Ultrasound::measureAsync(std::function<void(uint32_t)> callback) {
 }
 
 uint32_t Ultrasound::measure() {
+    if (Timers::get().isOnTimerTask()) {
+        ESP_LOGE(TAG,
+            "you can't call measure() from the ESP timer task, as it is a "
+            "blocking function. Use measureAsync.\n");
+        abort();
+    }
     std::unique_lock<std::recursive_mutex> ul(m_mutex);
     measureAsync();
     m_measuringDone.wait(ul);
