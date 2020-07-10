@@ -34,7 +34,7 @@ void Ultrasound::setSpeedOfSound(float speedOfSoundInMetersPerSecond) {
     m_mutex.unlock();
 }
 
-void Ultrasound::measureAsync(std::function<void(uint32_t)> callback) {
+void Ultrasound::measureAsync(callback_t callback) {
     std::lock_guard<std::recursive_mutex> ul(m_mutex);
 
     if (!m_measuring) {
@@ -69,7 +69,6 @@ uint32_t Ultrasound::measure() {
 }
 
 void Ultrasound::onMeasuringDone(const CoprocStat_UltrasoundStat& result) {
-    std::vector<callback_t> callbacks;
     uint32_t distance;
 
     {
@@ -79,13 +78,20 @@ void Ultrasound::onMeasuringDone(const CoprocStat_UltrasoundStat& result) {
         recalculateLastDistanceLocked();
         distance = m_lastDistanceMm;
         m_measuring = false;
-        m_callbacks.swap(callbacks);
         Timers::get().stop(m_timeoutTimer);
         m_measuringDone.notify_all();
-    }
 
-    for (const auto& cb : callbacks) {
-        cb(distance);
+        for (auto itr = m_callbacks.begin(); itr != m_callbacks.end();) {
+            if (!(*itr)(distance)) {
+                itr = m_callbacks.erase(itr);
+            } else {
+                ++itr;
+            }
+        }
+
+        if (!m_callbacks.empty()) {
+            measureAsync();
+        }
     }
 }
 

@@ -21,7 +21,7 @@ public:
     //!< Default is speed at 25C, 50%, 101 kPa
     static constexpr float defaultSpeedOfSound = 347.13f;
 
-    typedef std::function<void(uint32_t)> callback_t;
+    typedef std::function<bool(uint32_t)> callback_t;
 
     uint32_t lastDistanceMm() const { return m_lastDistanceMm; }
     uint32_t lastDurationUs() const { return m_lastUs; }
