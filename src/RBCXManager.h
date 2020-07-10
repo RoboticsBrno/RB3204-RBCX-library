@@ -78,13 +78,13 @@ public:
      * \brief Initialize the UART servo bus for intelligent servos LX-16. TODO: smart servos not implemented!
      * \return Instance of the class {@link SmartServoBus} which manage the intelligent servos.
      */
-    SmartServoBus& initSmartServoBus(uint8_t servo_count);
+    //SmartServoBus& initSmartServoBus(uint8_t servo_count);
 
     /**
      * \brief Get the {@link SmartServoBus} for working with intelligent servos LX-16..
      * \return Instance of the class {@link SmartServoBus} which manage the intelligent servos.
      */
-    SmartServoBus& servoBus() { return m_servos; };
+    //SmartServoBus& servoBus() { return m_servos; };
 
     Ultrasound& ultrasound(uint8_t index) { return m_ultrasounds[index]; }
 
@@ -154,7 +154,7 @@ private:
     rb::Leds m_leds;
     rb::Buttons m_buttons;
     rb::Battery m_battery;
-    rb::SmartServoBus m_servos;
+    //rb::SmartServoBus m_servos;
     rb::Ultrasound m_ultrasounds[UltrasoundsCount];
 };
 

@@ -47,6 +47,7 @@ void Motor::pwmMaxPercent(int8_t percent) {
     m_pwm_max_percent = std::min(int8_t(100), std::max(int8_t(0), percent));
 }
 
+#if 0
 void Motor::driveToValue(int32_t positionAbsolute, uint8_t power,
     std::function<void(Encoder&)> callback) {
     m_encoder.driveToValue(positionAbsolute, power, callback);
@@ -56,6 +57,8 @@ void Motor::drive(int32_t positionRelative, uint8_t power,
     std::function<void(Encoder&)> callback) {
     m_encoder.drive(positionRelative, power, callback);
 }
+
+#endif
 
 int16_t Motor::scale(int16_t val) {
     return int32_t(val) * m_pwm_max_percent / 100;

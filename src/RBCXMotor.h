@@ -52,6 +52,8 @@ public:
      */
     int8_t pwmMaxPercent() const { return m_pwm_max_percent; }
 
+// TODO
+#if 0
     /**
      * \brief Drive motor to set position (according absolute value). See {@link Encoder::driveToValue}.
      */
@@ -62,7 +64,7 @@ public:
      */
     void drive(int32_t positionRelative, uint8_t power,
         std::function<void(Encoder&)> callback = nullptr);
-
+#endif
     /**
      * \brief Get the Encoder instance for this motor. See {@link Encoder}.
      */

@@ -74,10 +74,10 @@ void Manager::install(ManagerInstallFlags flags) {
 #endif
 }
 
-rb::SmartServoBus& Manager::initSmartServoBus(uint8_t servo_count) {
+/*rb::SmartServoBus& Manager::initSmartServoBus(uint8_t servo_count) {
     m_servos.install(servo_count);
     return m_servos;
-}
+}*/
 
 void Manager::consumerRoutineTrampoline(void* cookie) {
     ((Manager*)cookie)->consumerRoutine();

@@ -21,6 +21,8 @@ class Encoder {
 public:
     ~Encoder();
 
+// TODO
+#if 0
     /**
      * \brief Drive motor to set position (according absolute value).
      *
@@ -56,6 +58,7 @@ public:
      * \return The number of counted edges after one second.
      */
     float speed();
+#endif
 
 private:
     Encoder();

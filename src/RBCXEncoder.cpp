@@ -15,6 +15,7 @@ Encoder::Encoder() {}
 
 Encoder::~Encoder() {}
 
+#if 0
 int32_t Encoder::value() {
     // TODO
     return 0;
@@ -34,5 +35,7 @@ void Encoder::drive(int32_t positionRelative, uint8_t power,
     std::function<void(Encoder&)> callback) {
     // TODO
 }
+
+#endif
 
 };
