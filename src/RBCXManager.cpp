@@ -21,7 +21,8 @@ Manager::Manager()
 
 Manager::~Manager() {}
 
-void Manager::install(ManagerInstallFlags flags) {
+void Manager::install(
+    ManagerInstallFlags flags, BaseType_t managerLoopStackSize) {
     if (m_keepaliveTask != nullptr) {
         ESP_LOGE(TAG,
             "The manager has already been installed, please make sure to "
@@ -65,8 +66,8 @@ void Manager::install(ManagerInstallFlags flags) {
     sendToCoproc(CoprocReq { .which_payload = CoprocReq_getButtons_tag });
 
     TaskHandle_t task;
-    xTaskCreate(&Manager::consumerRoutineTrampoline, "rbmanager_loop", 3072,
-        this, 5, &task);
+    xTaskCreate(&Manager::consumerRoutineTrampoline, "rbmanager_loop",
+        managerLoopStackSize, this, 5, &task);
     monitorTask(task);
 
 #ifdef RB_DEBUG_MONITOR_TASKS
@@ -84,7 +85,6 @@ void Manager::consumerRoutineTrampoline(void* cookie) {
 }
 
 void Manager::consumerRoutine() {
-
     CoprocLinkParser<CoprocStat, &CoprocStat_msg> parser(m_codec);
 
     while (true) {

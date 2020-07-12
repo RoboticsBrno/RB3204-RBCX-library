@@ -72,7 +72,8 @@ public:
      *
      * \param flags modify the manager's behavior or toggle some features. See @{ManagerInstallFlags} enum.
      */
-    void install(ManagerInstallFlags flags = MAN_NONE);
+    void install(ManagerInstallFlags flags = MAN_NONE,
+        BaseType_t managerLoopStackSize = 4096);
 
     /**
      * \brief Initialize the UART servo bus for intelligent servos LX-16. TODO: smart servos not implemented!
