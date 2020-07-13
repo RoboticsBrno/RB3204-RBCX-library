@@ -45,6 +45,12 @@ private:
         std::function<bool()> callback;
         esp_timer_handle_t handle;
         uint16_t id;
+
+        void swap(timer_t& o) {
+            callback.swap(o.callback);
+            std::swap(handle, o.handle);
+            std::swap(id, o.id);
+        }
     };
 
     static void timerCallback(void* handleVoid);

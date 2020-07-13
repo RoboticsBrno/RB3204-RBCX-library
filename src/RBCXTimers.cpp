@@ -56,11 +56,11 @@ uint16_t Timers::schedule(uint32_t period_ms, std::function<bool()> callback) {
     esp_timer_handle_t timer = nullptr;
     esp_timer_create(&timer_args, &timer);
 
-    m_timers.emplace_back(timer_t {
+    m_timers.emplace_back(std::move(timer_t {
         .callback = callback,
         .handle = timer,
         .id = id,
-    });
+    }));
 
     esp_timer_start_periodic(timer, uint64_t(period_ms) * 1000);
 
@@ -113,7 +113,7 @@ void Timers::cancelByIdxLocked(size_t idx) {
 
     const auto size = m_timers.size();
     if (idx + 1 < size) {
-        m_timers[idx] = std::move(m_timers[size - 1]);
+        m_timers[idx].swap(m_timers[size - 1]);
     }
     m_timers.pop_back();
 }

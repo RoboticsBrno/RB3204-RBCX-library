@@ -31,7 +31,7 @@ void Manager::install(
     }
 
     for (int i = 0; i < UltrasoundsCount; ++i) {
-        m_ultrasounds[i].setIndex(i);
+        m_ultrasounds[i].init(i);
     }
 
     for (MotorId id = MotorId::M1; id < MotorId::MAX; ++id) {

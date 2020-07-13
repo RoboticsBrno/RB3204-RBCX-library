@@ -31,7 +31,7 @@ public:
         float speedOfSoundInMetersPerSecond = defaultSpeedOfSound);
     float getSpeedOfSound() const { return m_speedOfSound; }
 
-    void measureAsync(callback_t callback = callback_t());
+    void measureAsync(callback_t callback = nullptr);
     uint32_t measure();
 
 private:
@@ -39,7 +39,7 @@ private:
     Ultrasound(const Ultrasound&) = delete;
     ~Ultrasound();
 
-    void setIndex(uint8_t index) { m_index = index; }
+    void init(uint8_t index);
 
     void recalculateLastDistanceLocked();
     void onMeasuringDone(const CoprocStat_UltrasoundStat& result);

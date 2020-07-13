@@ -14,18 +14,21 @@ Ultrasound::Ultrasound()
     , m_lastDistanceMm(0)
     , m_speedOfSound(defaultSpeedOfSound / 100.f)
     , m_measuring(false)
-    , m_timeoutTimer(0) {
+    , m_timeoutTimer(0) {}
+
+Ultrasound::~Ultrasound() {}
+
+void Ultrasound::init(uint8_t index) {
+    m_index = index;
 
     m_timeoutTimer = Timers::get().schedule(0xFFFFFFFF, [this]() -> bool {
-        ESP_LOGE(TAG, "Ultrasound response timeout!\n");
+        ESP_LOGE(TAG, "Ultrasound %d response timeout!\n", m_index);
         onMeasuringDone(CoprocStat_UltrasoundStat { 0 });
-        return false;
+        return true; // return true to prevent cancel, was stopped in onMeasuringDone
     });
 
     Timers::get().stop(m_timeoutTimer);
 }
-
-Ultrasound::~Ultrasound() {}
 
 void Ultrasound::setSpeedOfSound(float speedOfSoundInMetersPerSecond) {
     m_mutex.lock();
@@ -52,7 +55,7 @@ void Ultrasound::measureAsync(callback_t callback) {
     }
 
     if (callback)
-        m_callbacks.emplace_back(callback);
+        m_callbacks.emplace_back(std::move(callback));
 }
 
 uint32_t Ultrasound::measure() {
