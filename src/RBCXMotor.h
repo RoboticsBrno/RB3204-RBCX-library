@@ -4,8 +4,8 @@
 #include <functional>
 #include <memory>
 #include <mutex>
+#include <vector>
 
-#include "RBCXEncoder.h"
 #include "RBCXPinout.h"
 #include "RBCXUtil.h"
 
@@ -21,6 +21,14 @@ class Motor {
     friend class MotorChangeBuilder;
 
 public:
+    typedef std::function<void(Motor&)> callback_t;
+
+    MotorId id() const { return m_id; }
+
+    int32_t position() const { return m_position; }
+
+    void requestInfo(callback_t cb);
+
     /**
      * \brief Set motor power.
      * \param power of the motor <-32768; 32767>
@@ -52,49 +60,53 @@ public:
      */
     int8_t pwmMaxPercent() const { return m_pwm_max_percent; }
 
-// TODO
-#if 0
     /**
-     * \brief Drive motor to set position (according absolute value). See {@link Encoder::driveToValue}.
+     * \brief Drive motor to set position (according absolute value).
      */
-    void driveToValue(int32_t positionAbsolute, uint8_t power,
-        std::function<void(Encoder&)> callback = nullptr);
-    /**
-     * \brief Drive motor to set position (according relative value). See {@link Encoder::drive}.
-     */
-    void drive(int32_t positionRelative, uint8_t power,
-        std::function<void(Encoder&)> callback = nullptr);
-#endif
-    /**
-     * \brief Get the Encoder instance for this motor. See {@link Encoder}.
-     */
-    Encoder& encoder() { return m_encoder; }
+    void driveToValue(int32_t positionAbsolute, int16_t speedTicksPerSecond,
+        callback_t callback = nullptr);
 
     /**
-     * \brief Get the Encoder instance for this motor. Same as {@link encoder}.
+     * \brief Drive motor to set position (according relative value).
      */
-    Encoder& enc() { return encoder(); }
+    void drive(int32_t positionRelative, int16_t speedTicksPerSecond,
+        callback_t callback = nullptr);
+
+    /**
+     * \brief Set the encoder tick counter to some value
+     */
+    void setCurrentPosition(int32_t pos = 0);
+
+    /**
+     * \brief Set configuration, see MotorConfig & STM32 firmware
+     */
+    void setConfig(const MotorConfig& cfg);
 
 private:
     Motor();
     Motor(const Motor&) = delete;
 
-    void setId(MotorId id) {
-        m_id = id;
-        m_encoder.setId(id);
-    }
+    void setId(MotorId id) { m_id = id; }
 
+    void sendPositionReq(bool additive,
+        const CoprocReq_MotorReq_SetPosition& req, callback_t&& callback);
     void sendMotorReq(const CoprocReq_MotorReq& req);
+    void onMotorStat(const CoprocStat_MotorStat& msg);
 
     int16_t scale(int16_t val);
 
-    Encoder m_encoder;
+    callback_t m_positionCb;
+    std::vector<callback_t> m_infoCbs;
     CoprocReq_MotorReq m_lastReq;
     std::mutex m_mutex;
+
     MotorId m_id;
-    int8_t m_pwm_max_percent;
+    MotorMode m_mode;
+    int32_t m_position;
     int16_t m_power;
     int16_t m_speed;
+
+    int8_t m_pwm_max_percent;
 };
 
 } // namespace rb

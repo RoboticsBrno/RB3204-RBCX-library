@@ -10,7 +10,6 @@
 
 #include "RBCXBattery.h"
 #include "RBCXButtons.h"
-#include "RBCXEncoder.h"
 #include "RBCXLeds.h"
 #include "RBCXMotor.h"
 #include "RBCXPiezo.h"
@@ -121,6 +120,12 @@ public:
 
     void sendToCoproc(const CoprocReq& msg);
 
+    const CoprocStat_VersionStat& coprocFwVersion() const {
+        return m_coprocFwVersion;
+    }
+
+    void coprocFwVersionAssert(uint32_t minVersion, const char* name);
+
 private:
     Manager();
     ~Manager();
@@ -147,6 +152,8 @@ private:
     std::mutex m_codecTxMutex;
 
     uint16_t m_coprocWatchdogTimer;
+
+    CoprocStat_VersionStat m_coprocFwVersion;
 
     TickType_t m_motors_last_set;
     Motor m_motors[size_t(MotorId::MAX)];
@@ -196,6 +203,12 @@ public:
      * \param percent of the maximal power of the motor <0 - 100>
      **/
     MotorChangeBuilder& pwmMaxPercent(MotorId id, int8_t percent);
+
+    MotorChangeBuilder& drive(MotorId id, int32_t positionRelative,
+        int16_t speedTicksPerSecond, Motor::callback_t callback = nullptr);
+
+    MotorChangeBuilder& driveToValue(MotorId id, int32_t positionAbsolute,
+        int16_t speedTicksPerSecond, Motor::callback_t callback = nullptr);
 
     /**
      * \brief Finish the changes and submit the events.

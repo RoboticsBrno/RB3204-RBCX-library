@@ -17,7 +17,8 @@
 namespace rb {
 
 Manager::Manager()
-    : m_keepaliveTask(nullptr) {}
+    : m_keepaliveTask(nullptr)
+    , m_coprocFwVersion(CoprocStat_VersionStat_init_zero) {}
 
 Manager::~Manager() {}
 
@@ -111,10 +112,14 @@ void Manager::consumerRoutine() {
         case CoprocStat_powerAdcStat_tag:
             m_battery.setState(msg.payload.powerAdcStat);
             break;
-        case CoprocStat_versionStat_tag: {
-            const auto& p = msg.payload.versionStat;
-            printf("STM32 FW version: %06x %.8s%s\n", p.number, p.revision,
-                p.dirty ? "-dirty" : "");
+        case CoprocStat_versionStat_tag:
+            m_coprocFwVersion = msg.payload.versionStat;
+            break;
+        case CoprocStat_motorStat_tag: {
+            const auto& p = msg.payload.motorStat;
+            if (p.motorIndex < (uint32_t)MotorId::MAX) {
+                m_motors[p.motorIndex].onMotorStat(p);
+            }
             break;
         }
 
@@ -153,6 +158,20 @@ void Manager::sendToCoproc(const CoprocReq& msg) {
     m_codecTxMutex.unlock();
 
     xTaskNotify(m_keepaliveTask, 0, eNoAction);
+}
+
+void Manager::coprocFwVersionAssert(uint32_t minVersion, const char* name) {
+    // Ignore zero version number and pass. Might be the cmd was not received yet,
+    // but better than to crash in that case.
+    if (m_coprocFwVersion.number == 0)
+        return;
+
+    if (minVersion > m_coprocFwVersion.number) {
+        printf("\n\nERROR: Please update your STM32 FW, '%s' requires version "
+               "0x%06x and you have 0x%06x!\n\n",
+            name, minVersion, m_coprocFwVersion.number);
+        abort();
+    }
 }
 
 void Manager::resetMotorsFailSafe() { m_motors_last_set = xTaskGetTickCount(); }
@@ -206,28 +225,50 @@ MotorChangeBuilder::MotorChangeBuilder(MotorChangeBuilder&& o)
 MotorChangeBuilder::~MotorChangeBuilder() {}
 
 MotorChangeBuilder& MotorChangeBuilder::power(MotorId id, int16_t value) {
-    m_calls.emplace_back([=]() { Manager::get().motor(id).power(value); });
+    m_calls.emplace_back(
+        std::move([=]() { Manager::get().motor(id).power(value); }));
     return *this;
 }
 
 MotorChangeBuilder& MotorChangeBuilder::speed(
     MotorId id, int16_t ticksPerSecond) {
     m_calls.emplace_back(
-        [=]() { Manager::get().motor(id).speed(ticksPerSecond); });
+        std::move([=]() { Manager::get().motor(id).speed(ticksPerSecond); }));
     return *this;
 }
 
 MotorChangeBuilder& MotorChangeBuilder::pwmMaxPercent(
     MotorId id, int8_t percent) {
     m_calls.emplace_back(
-        [=]() { Manager::get().motor(id).pwmMaxPercent(percent); });
+        std::move([=]() { Manager::get().motor(id).pwmMaxPercent(percent); }));
     return *this;
 }
 
 MotorChangeBuilder& MotorChangeBuilder::brake(
     MotorId id, uint16_t brakingPower) {
     m_calls.emplace_back(
-        [=]() { Manager::get().motor(id).brake(brakingPower); });
+        std::move([=]() { Manager::get().motor(id).brake(brakingPower); }));
+    return *this;
+}
+
+MotorChangeBuilder& MotorChangeBuilder::drive(MotorId id,
+    int32_t positionRelative, int16_t speedTicksPerSecond,
+    Motor::callback_t callback) {
+
+    m_calls.emplace_back(std::move([=]() {
+        Manager::get().motor(id).drive(
+            positionRelative, speedTicksPerSecond, std::move(callback));
+    }));
+    return *this;
+}
+
+MotorChangeBuilder& MotorChangeBuilder::driveToValue(MotorId id,
+    int32_t positionAbsolute, int16_t speedTicksPerSecond,
+    Motor::callback_t callback) {
+    m_calls.emplace_back(std::move([=]() {
+        Manager::get().motor(id).driveToValue(
+            positionAbsolute, speedTicksPerSecond, std::move(callback));
+    }));
     return *this;
 }
 
