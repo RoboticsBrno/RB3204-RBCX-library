@@ -32,6 +32,6 @@ void Buttons::setState(const CoprocStat_ButtonsStat& msg) {
 
 void Buttons::onChange(callback_t callback) {
     std::lock_guard<std::recursive_mutex> l(m_mutex);
-    m_callbacks.emplace_back(callback);
+    m_callbacks.emplace_back(std::move(callback));
 }
 };
