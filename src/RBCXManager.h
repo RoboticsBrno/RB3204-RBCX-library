@@ -154,6 +154,7 @@ private:
     uint16_t m_coprocWatchdogTimer;
 
     CoprocStat_VersionStat m_coprocFwVersion;
+    SemaphoreHandle_t m_coprocSemaphore;
 
     TickType_t m_motors_last_set;
     Motor m_motors[size_t(MotorId::MAX)];

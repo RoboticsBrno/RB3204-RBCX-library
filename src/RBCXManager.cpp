@@ -57,19 +57,28 @@ void Manager::install(
         UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
     ESP_ERROR_CHECK(uart_driver_install(UART_NUM_2, 1024, 0, 0, NULL, 0));
 
+    m_coprocSemaphore = xSemaphoreCreateBinary();
+
     // The esp_timer (-> rb::Timers) task runs pinned on core 0, which gets stalled
     // for ~700 ms(?!) when connecting to a WiFi network, so it can't be used
     // for this watchdog.
     xTaskCreate(&Manager::keepaliveRoutine, "rbmanager_keepalive", 1536, this,
         10, &m_keepaliveTask);
-
-    sendToCoproc(CoprocReq { .which_payload = CoprocReq_versionReq_tag });
-    sendToCoproc(CoprocReq { .which_payload = CoprocReq_getButtons_tag });
+    monitorTask(m_keepaliveTask);
 
     TaskHandle_t task;
     xTaskCreate(&Manager::consumerRoutineTrampoline, "rbmanager_loop",
         managerLoopStackSize, this, 5, &task);
     monitorTask(task);
+
+    sendToCoproc(CoprocReq { .which_payload = CoprocReq_versionReq_tag });
+    sendToCoproc(CoprocReq { .which_payload = CoprocReq_getButtons_tag });
+
+    if (xSemaphoreTake(m_coprocSemaphore, pdMS_TO_TICKS(300)) != pdTRUE) {
+        ESP_LOGE(TAG,
+            "failed to acquire FW version from STM32, message not received in "
+            "300ms.\n");
+    }
 
 #ifdef RB_DEBUG_MONITOR_TASKS
     schedule(10000, [&]() { return printTasksDebugInfo(); });
@@ -114,6 +123,7 @@ void Manager::consumerRoutine() {
             break;
         case CoprocStat_versionStat_tag:
             m_coprocFwVersion = msg.payload.versionStat;
+            xSemaphoreGive(m_coprocSemaphore);
             break;
         case CoprocStat_motorStat_tag: {
             const auto& p = msg.payload.motorStat;
