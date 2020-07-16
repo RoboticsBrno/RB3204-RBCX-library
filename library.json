@@ -31,7 +31,7 @@
             "version": "https://github.com/RoboticsBrno/RB3204-RBCX-coproc-comm/archive/6715dde5a9b004860dfa17af17f330ded1fa9715.zip"
         }
     ],
-    "version": "1.0.1",
+    "version": "1.1.0",
     "frameworks": [
         "espidf",
         "arduino"
