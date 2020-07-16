@@ -35,6 +35,10 @@ void Manager::install(
         m_ultrasounds[i].init(i);
     }
 
+    for (int i = 0; i < StupidServosCount; ++i) {
+        m_stupidServos[i].setId(i);
+    }
+
     for (MotorId id = MotorId::M1; id < MotorId::MAX; ++id) {
         m_motors[size_t(id)].setId(id);
     }

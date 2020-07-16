@@ -19,5 +19,6 @@ inline MotorId operator++(MotorId& x) {
 }
 
 static constexpr int UltrasoundsCount = 4;
+static constexpr int StupidServosCount = 4;
 
 } // namespace rb

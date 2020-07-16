@@ -6,7 +6,7 @@
 #include <math.h>
 
 #include "RBCXManager.h"
-#include "RBCXServo.h"
+#include "RBCXSmartServo.h"
 
 #define TAG "RBCXSmartServoBus"
 #define MS_TO_TICKS(ms)                                                        \

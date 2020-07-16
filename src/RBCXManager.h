@@ -13,7 +13,8 @@
 #include "RBCXLeds.h"
 #include "RBCXMotor.h"
 #include "RBCXPiezo.h"
-#include "RBCXServo.h"
+#include "RBCXSmartServo.h"
+#include "RBCXStupidServo.h"
 #include "RBCXTimers.h"
 #include "RBCXUltrasound.h"
 
@@ -87,6 +88,8 @@ public:
     //SmartServoBus& servoBus() { return m_servos; };
 
     Ultrasound& ultrasound(uint8_t index) { return m_ultrasounds[index]; }
+
+    StupidServo& stupidServo(uint8_t index) { return m_stupidServos[index]; }
 
     Piezo& piezo() { return m_piezo; } //!< Get the {@link Piezo} controller
     Battery& battery() {
@@ -165,6 +168,7 @@ private:
     rb::Battery m_battery;
     //rb::SmartServoBus m_servos;
     rb::Ultrasound m_ultrasounds[UltrasoundsCount];
+    rb::StupidServo m_stupidServos[StupidServosCount];
 };
 
 /**
