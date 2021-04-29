@@ -1,0 +1,220 @@
+syntax = "proto3";
+
+import "nanopb.proto";
+
+message None {
+}
+
+enum MotorMode {
+  POWER = 0;
+  BRAKE = 1;
+  VELOCITY = 2;
+  POSITION = 3;
+  POSITION_IDLE = 4;
+}
+
+message RegCoefs {
+  uint32 p = 1;
+  uint32 i = 2;
+  uint32 d = 3;
+}
+
+message MotorConfig {
+  uint32 velEpsilon = 1;
+  uint32 posEpsilon = 2;
+  uint32 maxAccel = 3;
+}
+
+message CoprocReq {
+  oneof payload {
+    None keepalive = 1;
+    SetLeds setLeds = 4;
+    GetButtons getButtons = 5;
+    SetStupidServo setStupidServo = 6;
+    UltrasoundReq ultrasoundReq = 7;
+    MotorReq motorReq = 8;
+    BuzzerReq buzzerReq = 9;
+    CalibratePower calibratePower = 10;
+    None shutdownPower = 11;
+    None versionReq = 12;
+    RtcReq rtcReq = 13;
+    I2cReq i2cReq = 14;
+  }
+
+  message SetLeds {
+    LedsEnum ledsOn = 1;
+  }
+
+  enum LedsEnum {
+    NONE = 0;
+    L1 = 1;
+    L2 = 2;
+    L3 = 4;
+    L4 = 8;
+  }
+
+  message GetButtons {
+  }
+
+  message SetStupidServo {
+    uint32 servoIndex = 1;
+    oneof servoCmd {
+      None disable = 4;
+      float setPosition = 5;
+    }
+  }
+
+  message UltrasoundReq {
+    uint32 utsIndex = 1;
+    oneof utsCmd {
+      None singlePing = 4;
+    }
+  }
+
+  message MotorReq {
+    uint32 motorIndex = 1;
+    oneof motorCmd {
+      None getState = 4;
+      sint32 setPower = 5;
+      sint32 setBrake = 6;
+      sint32 setVelocity = 7;
+      sint32 homePosition = 8;
+      SetPosition setPosition = 10;
+      SetPosition addPosition = 11;
+      RegCoefs setVelocityRegCoefs = 16;
+      RegCoefs setPositionRegCoefs = 17;
+      MotorConfig setConfig = 18;
+    }
+
+    message SetPosition {
+      sint32 targetPosition = 1;
+      sint32 runningVelocity = 2;
+    }
+  }
+
+  message BuzzerReq {
+    bool on = 1;
+  }
+
+  message CalibratePower {
+    uint32 vccMv = 1;
+    uint32 battMidMv = 2;
+    uint32 vRef33Mv = 3;
+    uint32 temperatureC = 4;
+  }
+
+  message RtcReq {
+    oneof rtcCmd {
+      None get = 1;
+      uint32 setTime = 2;
+      uint32 setAlarm = 3;
+    }
+  }
+
+  message I2cReq {
+    oneof i2cCmd {
+      I2cSend transmit = 1;
+      I2cSend receive = 2;
+      uint32 ready = 3;
+      None scan = 4;
+    }
+  }
+
+  message I2cSend {
+    uint32 devAdress = 1;
+    uint32 data = 2;
+    uint32 size = 3;
+  }
+}
+
+message CoprocStat {
+  oneof payload {
+    None ledsStat = 4;
+    ButtonsStat buttonsStat = 5;
+    None stupidServoStat = 6;
+    UltrasoundStat ultrasoundStat = 7;
+    PowerAdcStat powerAdcStat = 8;
+    VersionStat versionStat = 9;
+    MotorStat motorStat = 10;
+    RtcStat rtcStat = 11;
+    I2cStat i2cStat = 12;
+  }
+
+  message ButtonsStat {
+    ButtonsEnum buttonsPressed = 1;
+  }
+
+  enum ButtonsEnum {
+    BNONE = 0;
+    BOFF = 1;
+    B1 = 2;
+    B2 = 4;
+    B3 = 8;
+    B4 = 16;
+    BON = 32;
+  }
+
+  message UltrasoundStat {
+    uint32 utsIndex = 1;
+    uint32 roundtripMicrosecs = 2;
+  }
+
+  message MotorStat {
+    uint32 motorIndex = 1;
+    MotorMode mode = 2;
+    sint32 power = 3;
+    sint32 velocity = 4;
+    sint32 position = 5;
+  }
+
+  message PowerAdcStat {
+    uint32 vccMv = 1;
+    uint32 battMidMv = 2;
+    int32 temperatureC = 3;
+  }
+
+  message VersionStat {
+    bytes revision = 1 [(nanopb).max_size = 8, (nanopb).fixed_length = true];
+    uint32 number = 2;
+    bool dirty = 3;
+  }
+
+  message RtcStat {
+    uint32 time = 1;
+    uint32 alarm = 2;
+    RtcFlags flags = 3;
+  }
+
+  enum RtcFlags {
+    RTC_NONE = 0;
+    RTC_NOT_READY = 1;
+    RTC_ALARM = 2;
+  }
+
+  message I2cStat {
+    // I2cStatus i2cStatus = 1;
+    // I2cReceive receive = 2;
+    I2cReady ready = 3;
+    I2cScan scan = 4;
+  }
+
+  // message I2cReceive {
+
+  // }
+
+  message I2cReady {
+    uint32 devAddress = 1;
+    uint32 ready = 2;
+  }
+
+  message I2cScan {
+    uint32 count = 1;
+  }
+
+  // enum I2cStatus {
+  //   I2C_OK = 1
+  //   I2C_ERROR = 2
+  //   I2C_BUSY = 3
+  //   I2C_TIMEOUT = 4
+  // }
+}

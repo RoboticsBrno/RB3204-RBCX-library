@@ -12,6 +12,7 @@
 #include "RBCXButtons.h"
 #include "RBCXLeds.h"
 #include "RBCXMotor.h"
+#include "RBCXI2c.h"
 #include "RBCXPiezo.h"
 #include "RBCXSmartServo.h"
 #include "RBCXStupidServo.h"
@@ -91,6 +92,8 @@ public:
 
     StupidServo& stupidServo(uint8_t index) { return m_stupidServos[index]; }
 
+    I2c& i2c() { return m_i2c; } //!< Get the {@link I2c} controller
+
     Piezo& piezo() { return m_piezo; } //!< Get the {@link Piezo} controller
     Battery& battery() {
         return m_battery;
@@ -161,7 +164,8 @@ private:
 
     TickType_t m_motors_last_set;
     Motor m_motors[size_t(MotorId::MAX)];
-
+    
+    rb::I2c m_i2c;
     rb::Piezo m_piezo;
     rb::Leds m_leds;
     rb::Buttons m_buttons;

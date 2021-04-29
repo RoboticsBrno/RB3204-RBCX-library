@@ -136,7 +136,11 @@ void Manager::consumerRoutine() {
             }
             break;
         }
-
+        case CoprocStat_i2cStat_tag:
+            if(msg.payload.i2cStat.has_scan) {
+                printf("I2cScan count = %d; hasSca: %d\n", msg.payload.i2cStat.scan.count, msg.payload.i2cStat.has_scan);
+            }
+            break;        
         case CoprocStat_ledsStat_tag:
         case CoprocStat_stupidServoStat_tag:
             // Ignore
