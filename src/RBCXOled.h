@@ -1,6 +1,7 @@
 #pragma once
 
 #include <atomic>
+#include "WString.h"
 
 namespace rb {
 
@@ -34,13 +35,16 @@ public:
     void fill(OledColor color = White);
     void updateScreen(void);
     void drawPixel(uint8_t x, uint8_t y, OledColor color = White);
-    char writeChar(char ch, OledFontDef Font, OledColor color = White);
-    char writeString(char* str, OledFontDef Font, OledColor color = White);
+    void writeString(const char* str, OledFontDef Font, OledColor color = White);
+    void writeString(char* str, OledFontDef Font, OledColor color = White);
+    void writeString(String str, OledFontDef Font, OledColor color = White);
     void setCursor(uint8_t x, uint8_t y);
     void drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, OledColor color);
     void drawArc(uint8_t x, uint8_t y, uint8_t radius, uint16_t start_angle, uint16_t sweep, OledColor color);
-    void drawCircle(uint8_t par_x, uint8_t par_y, uint8_t par_r, OledColor color);
-    void drawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, OledColor color);    
+    void drawCircle(uint8_t x, uint8_t y, uint8_t radius, OledColor color);
+    void drawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, OledColor color);
+    inline uint8_t getWidth() {return m_width;}
+    inline uint8_t getHeight() {return m_height;}
 
 private:
     Oled();
