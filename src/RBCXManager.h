@@ -13,6 +13,7 @@
 #include "RBCXLeds.h"
 #include "RBCXMotor.h"
 #include "RBCXOled.h"
+#include "RBCXMpu.h"
 #include "RBCXPiezo.h"
 #include "RBCXSmartServo.h"
 #include "RBCXStupidServo.h"
@@ -41,7 +42,7 @@ inline ManagerInstallFlags operator|(
 }
 
 // Periodically print info about all RBCX tasks to the console
-//#define RB_DEBUG_MONITOR_TASKS 1
+// #define RB_DEBUG_MONITOR_TASKS 1
 
 /**
  * \brief The main library class for working with the RBCX board.
@@ -93,6 +94,7 @@ public:
     StupidServo& stupidServo(uint8_t index) { return m_stupidServos[index]; }
 
     Oled& oled() { return m_oled; } //!< Get the {@link Piezo} controller
+    Mpu& mpu() { return m_mpu; } //!< Get the {@link Piezo} controller
     Piezo& piezo() { return m_piezo; } //!< Get the {@link Piezo} controller
     Battery& battery() {
         return m_battery;
@@ -165,6 +167,7 @@ private:
     Motor m_motors[size_t(MotorId::MAX)];
 
     rb::Oled m_oled;
+    rb::Mpu m_mpu;
     rb::Piezo m_piezo;
     rb::Leds m_leds;
     rb::Buttons m_buttons;

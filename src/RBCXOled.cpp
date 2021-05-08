@@ -121,11 +121,18 @@ void Oled::writeString(String str, OledFontDef Font, OledColor color) {
         .payload = {
             .oledReq = {
                 .which_oledCmd = CoprocReq_OledReq_writeString_tag,
+                .oledCmd = {
+                    .writeString = {
+                        .text = {},
+                        .font = CoprocReq_OledFont(Font),
+                        .color = CoprocReq_OledColor(color),
+                    }
+                }
             }
         }
     };
-    message.payload.oledReq.oledCmd.writeString.font = CoprocReq_OledFont(Font);
-    message.payload.oledReq.oledCmd.writeString.color = CoprocReq_OledColor(color); 
+    // message.payload.oledReq.oledCmd.writeString.font = CoprocReq_OledFont(Font);
+    // message.payload.oledReq.oledCmd.writeString.color = CoprocReq_OledColor(color);
     strcpy(message.payload.oledReq.oledCmd.writeString.text, str.c_str());
     rb::Manager::get().sendToCoproc(message);
 }

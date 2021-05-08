@@ -141,6 +141,9 @@ void Manager::consumerRoutine() {
         case CoprocStat_stupidServoStat_tag:
             // Ignore
             break;
+        case CoprocStat_mpuStat_tag:
+            m_mpu.setState(msg.payload.mpuStat);
+            break;
         default:
             printf("Received message of unknown type from stm32: %d\n",
                 msg.which_payload);
