@@ -50,6 +50,7 @@ private:
     Oled();
     Oled(const Oled&) = delete;
     ~Oled();
+    void sendOledReq(CoprocReq_OledReq oledReq);
 
     bool m_init;
     uint32_t m_width;
