@@ -54,7 +54,12 @@ class Mpu {
     friend class Manager;
 
 
-public:    
+public:
+    void init();
+    void sendOne();
+    void sendStart();
+    void sendStop();
+
     MpuVector getAcc();
     float getAccX();
     float getAccY();
@@ -70,8 +75,20 @@ public:
     float getAngleY();
     float getAngleZ();
 
+    long getInterval();
+
+    void setCompressCoef(uint8_t coef);
+    uint8_t getCompressCoef();
+
 
 private:
+    MpuMotion9 m_mpuMotion;
+    MpuMotion6 m_mpuMotionOffset;
+
+    long preInterval;
+    int32_t interval;
+    uint8_t compressCoef = 4;
+
     Mpu();
     Mpu(const Mpu&) = delete;
     ~Mpu();
@@ -85,10 +102,6 @@ private:
     void calcOffsets();
     float wrap(float angle,float limit);
     
-
-    MpuMotion9 m_mpuMotion;
-    MpuMotion6 m_mpuMotionOffset;
-
-    long preInterval;
+    void sendMpuReq(CoprocReq_MpuReq mpuReq);
 };
 };
