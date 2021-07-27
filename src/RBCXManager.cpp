@@ -144,6 +144,9 @@ void Manager::consumerRoutine() {
         case CoprocStat_mpuStat_tag:
             m_mpu.setState(msg.payload.mpuStat);
             break;
+        case CoprocStat_faultStat_tag:
+            fault(msg.payload.faultStat);
+            break;            
         default:
             printf("Received message of unknown type from stm32: %d\n",
                 msg.which_payload);
@@ -233,6 +236,22 @@ bool Manager::printTasksDebugInfo() {
     return true;
 }
 #endif
+
+void Manager::fault(CoprocStat_FaultStat faultStat) {
+    switch (faultStat.which_fault)
+    {
+    case CoprocStat_FaultStat_oledFault_tag:
+        printf("Oled not connected\n");
+        break;
+
+    case CoprocStat_FaultStat_mpuFault_tag:
+        printf("MPU6050 not connected\n");
+        break;
+    
+    default:
+        printf("Non specific error\n");
+    }
+}
 
 MotorChangeBuilder::MotorChangeBuilder() {}
 

@@ -151,6 +151,7 @@ private:
     std::vector<TaskHandle_t> m_tasks;
     std::mutex m_tasks_mutex;
 #endif
+    void fault(CoprocStat_FaultStat faultStat);
 
     TaskHandle_t m_keepaliveTask;
 
