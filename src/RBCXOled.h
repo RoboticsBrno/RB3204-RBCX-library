@@ -1,6 +1,5 @@
 #pragma once
 
-#include <atomic>
 #include "WString.h"
 
 namespace rb {
