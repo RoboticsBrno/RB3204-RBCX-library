@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['temperaturec_335',['temperatureC',['../classrb_1_1Battery.html#a9540bf9954b6fb6c9058b5fda26214d1',1,'rb::Battery']]],
-  ['timers_336',['timers',['../classrb_1_1Manager.html#a6071fb5cf7117ae3893f77ffa5002d50',1,'rb::Manager']]]
+  ['temperaturec_0',['temperatureC',['../classrb_1_1Battery.html#a9540bf9954b6fb6c9058b5fda26214d1',1,'rb::Battery']]],
+  ['timers_1',['timers',['../classrb_1_1Manager.html#a396938fbbdc0b06117846ae8ec45d957',1,'rb::Manager']]]
 ];

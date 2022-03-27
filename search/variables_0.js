@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['battery_5fin_5fthreshold_346',['BATTERY_IN_THRESHOLD',['../classrb_1_1Battery.html#aa44fd2f2530ea4ccfb50df161217c40e',1,'rb::Battery']]]
+  ['battery_5fin_5fthreshold_0',['BATTERY_IN_THRESHOLD',['../classrb_1_1Battery.html#aa44fd2f2530ea4ccfb50df161217c40e',1,'rb::Battery']]]
 ];
