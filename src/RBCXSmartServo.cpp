@@ -4,6 +4,7 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <math.h>
+#include <stdexcept>
 
 #include "RBCXManager.h"
 #include "RBCXSmartServo.h"
@@ -17,6 +18,10 @@ namespace rb {
 SmartServoBus::SmartServoBus() {}
 
 void SmartServoBus::install(uint8_t servo_count) {
+
+    // Add exception not implemented
+    throw std::runtime_error("SmartServo is not implemented yet");
+
     if (!m_servos.empty() || servo_count == 0)
         return;
 

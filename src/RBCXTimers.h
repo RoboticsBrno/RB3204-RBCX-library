@@ -33,8 +33,25 @@ public:
      */
     uint16_t schedule(uint32_t period_ms, std::function<bool()> callback);
 
+    /**
+     * \brief Reset the timer with the given ID.
+     * \param id is the ID of the timer to reset.
+     * \param period_ms is the new period of the timer.
+    */
     bool reset(uint16_t id, uint32_t period_ms);
+
+    /**
+     * \brief Cancel the timer with the given ID.
+     * \param id is the ID of the timer to cancel.
+     * \return true if the timer was cancelled, false if the timer was not found.
+     */
     bool cancel(uint16_t id);
+
+    /**
+     * \brief Stop the timer with the given ID.
+     * \param id is the ID of the timer to stop.
+     * \return true if the timer was stopped, false if the timer was not found.
+     */
     bool stop(uint16_t id);
 
     // returns true if the calling code is running in the timer task.

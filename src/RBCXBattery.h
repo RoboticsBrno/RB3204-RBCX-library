@@ -19,19 +19,20 @@ public:
         = 4200 * 2; //!< Maximal battery voltage, in mV
     static constexpr uint32_t BATTERY_IN_THRESHOLD = 5000;
 
-    uint32_t pct() const; //!< returns current battery percentage
-    //!< returns current battery voltage
+    uint32_t pct() const; //!< returns current battery percentage (0-100)
+
+    //!< returns current battery voltage in mV
     uint32_t voltageMv() const { return m_state.vccMv; }
 
-    //!< returns battery Mid point voltage
+    //!< returns battery Mid point voltage in mV
     uint32_t bMidVoltageMv() const { return m_state.battMidMv; }
 
-    //!< returns current temperature as measured by the STM32 coprocessor
+    //!< returns current temperature as measured by the STM32 coprocessor in °C
     int32_t temperatureC() const { return m_state.temperatureC; }
 
     void shutdown(); //!< shuts the robot's battery power
 
-    //!< Returns true if the Robot's battery power branch is on
+    //!< Returns true if the Robot's battery power branch is on (battery is connected)
     bool isPoweredByBattery() const {
         return voltageMv() > BATTERY_IN_THRESHOLD;
     }

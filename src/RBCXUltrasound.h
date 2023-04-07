@@ -23,15 +23,49 @@ public:
 
     typedef std::function<bool(uint32_t)> callback_t;
 
+    /**
+     * @brief Get the last measured distance in mm.
+     * If the last measurement was invalid or not yet done, returns 0.
+     * @return uint32_t
+     */
     uint32_t lastDistanceMm() const { return m_lastDistanceMm; }
+
+    /**
+     * @brief Get the last measured duration in us.
+     * If the last measurement was invalid or not yet done, returns 0.
+     * @return uint32_t
+     */
     uint32_t lastDurationUs() const { return m_lastUs; }
+
+    /**
+     * @brief Returns true if the last measurement was valid
+     * Tests if the last measurement was`nt 0.
+     * @return bool
+     */
     bool isLastMeasurementValid() const { return m_lastUs != 0; }
 
-    void setSpeedOfSound(
-        float speedOfSoundInMetersPerSecond = defaultSpeedOfSound);
+    /**
+     * @brief Set the speed of sound in m/s.
+     */
+    void setSpeedOfSound(float speedOfSoundInMetersPerSecond = defaultSpeedOfSound);
+
+    /**
+     * @brief Get the speed of sound in m/s.
+     */
     float getSpeedOfSound() const { return m_speedOfSound; }
 
+    /**
+     * @brief Asynchronously measure the distance to an object.
+     * The callback will be called when the measurement is done.
+     * @param callback is a function which will be called when the measurement is done.
+     */
     void measureAsync(callback_t callback = nullptr);
+
+    /**
+     * @brief Synchronously measure the distance to an object.
+     * This function will block until the measurement is done.
+     * @return uint32_t
+     */
     uint32_t measure();
 
 private:

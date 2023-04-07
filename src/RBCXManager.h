@@ -2,6 +2,7 @@
 
 #include <freertos/FreeRTOS.h>
 #include <freertos/queue.h>
+#include "freertos/semphr.h"
 #include <functional>
 #include <list>
 #include <memory>
@@ -19,6 +20,7 @@
 #include "RBCXStupidServo.h"
 #include "RBCXTimers.h"
 #include "RBCXUltrasound.h"
+#include "RBCXStupidServo.h"
 
 #include "coproc_link_parser.h"
 #include "rbcx.pb.h"
@@ -93,8 +95,12 @@ public:
 
     StupidServo& stupidServo(uint8_t index) { return m_stupidServos[index]; }
 
+
     Oled& oled() { return m_oled; } //!< Get the {@link Piezo} controller
     Mpu& mpu() { return m_mpu; } //!< Get the {@link Piezo} controller
+    
+    // SmartServoBus& smartServoBus() { return m_smartServoBus; } //!< Not implemented yet!
+
     Piezo& piezo() { return m_piezo; } //!< Get the {@link Piezo} controller
     Battery& battery() {
         return m_battery;
@@ -176,6 +182,7 @@ private:
     //rb::SmartServoBus m_servos;
     rb::Ultrasound m_ultrasounds[UltrasoundsCount];
     rb::StupidServo m_stupidServos[StupidServosCount];
+    // rb::SmartServoBus m_smartServoBus; //!< Not implemented yet!
 };
 
 /**
@@ -216,14 +223,32 @@ public:
      **/
     MotorChangeBuilder& pwmMaxPercent(MotorId id, int8_t percent);
 
+    /**
+     * \brief Drive motor to relative position.
+     * \param id of the motor (e.g. rb:MotorId::M1)
+     * \param positionRelative relative position of the motor in encoder ticks
+     * \param speedTicksPerSecond speed of the motor in encoder ticks <-32768; 32767>
+     * \param callback is a function which will be called when the motor reach the position
+     * \return MotorChangeBuilder
+     **/
     MotorChangeBuilder& drive(MotorId id, int32_t positionRelative,
         int16_t speedTicksPerSecond, Motor::callback_t callback = nullptr);
 
+    /**
+     * \brief Drive motor to absolute position.
+     * \param id of the motor (e.g. rb:MotorId::M1)
+     * \param positionAbsolute absolute position of the motor in encoder ticks
+     * \param speedTicksPerSecond speed of the motor in encoder ticks <-32768; 32767>
+     * \param callback is a function which will be called when the motor reach the position
+     * \return MotorChangeBuilder
+     **/
     MotorChangeBuilder& driveToValue(MotorId id, int32_t positionAbsolute,
         int16_t speedTicksPerSecond, Motor::callback_t callback = nullptr);
 
     /**
      * \brief Finish the changes and submit the events.
+     * This method must be called at the end of the motor change event.
+     * If the method is not called, the motor change event will not be submitted.
      **/
     void set();
 
