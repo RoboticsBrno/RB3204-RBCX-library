@@ -57,28 +57,42 @@ public:
 
     /**
      * \brief Get current maximum PWM percent value.
+     * \return current maximum PWM percent value
      */
     int8_t pwmMaxPercent() const { return m_pwm_max_percent; }
 
     /**
      * \brief Drive motor to set position (according absolute value).
+     * \param positionAbsolute absolute position of the motor in encoder ticks
+     * \param speedTicksPerSecond speed of the motor in encoder ticks <-32768; 32767>
+     * \param callback is a function which will be called when the motor reach the position
+     * \return MotorChangeBuilder
      */
     void driveToValue(int32_t positionAbsolute, int16_t speedTicksPerSecond,
         callback_t callback = nullptr);
 
     /**
      * \brief Drive motor to set position (according relative value).
+     * \param positionRelative relative position of the motor in encoder ticks
+     * \param speedTicksPerSecond speed of the motor in encoder ticks <-32768; 32767>
+     * \param callback is a function which will be called when the motor reach the position
+     * \return MotorChangeBuilder
+     * \note If you call drive(100, 100) and then drive(100, 100), the motor will
+     * drive to 200 ticks. If you call drive(100, 100) and then drive(-100, 100),
+     * the motor will drive to 0 ticks.
      */
     void drive(int32_t positionRelative, int16_t speedTicksPerSecond,
         callback_t callback = nullptr);
 
     /**
      * \brief Set the encoder tick counter to some value
+     * \param pos new position of the motor in encoder ticks
      */
     void setCurrentPosition(int32_t pos = 0);
 
     /**
      * \brief Set configuration, see MotorConfig & STM32 firmware
+     * \param cfg new configuration
      */
     void setConfig(const MotorConfig& cfg);
 

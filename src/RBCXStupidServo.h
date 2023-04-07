@@ -21,6 +21,7 @@ public:
     //!< Returns last set position (can be NaN if disabled)
     float position() const { return m_lastPosition; }
 
+    //!< Disables servo
     void disable();
 
 private:

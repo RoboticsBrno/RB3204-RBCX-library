@@ -12,15 +12,31 @@ namespace rb {
 class Manager;
 class Encoder;
 
+/**
+ * \brief SmartServoBus is a class for controlling servos.
+ * \note Class is not implemented yet.
+ */
 class SmartServoBus {
     friend class Manager;
 
 public:
-    SmartServoBus();
-    ~SmartServoBus() {}
+    SmartServoBus(); //!< Creates a new SmartServoBus instance.
+    ~SmartServoBus() {} //!< Destroys the SmartServoBus instance.
 
-    void set(uint8_t id, Angle ang, float speed = 180.f,
-        float speed_raise = 0.0015f);
+    /**
+     * @brief Installs the SmartServoBus.
+     * @param servo_count Number of servos to install.
+     */
+    void install(uint8_t servo_count);
+
+    /**
+     * @brief Sets the position of the servo with the given ID.
+     */
+    void set(uint8_t id, Angle ang, float speed = 180.f, float speed_raise = 0.0015f);
+
+    /**
+     * @brief Set servo limits (in degrees).
+     */
     void limit(uint8_t id, Angle bottom, Angle top);
 
     Angle pos(uint8_t id);
@@ -28,13 +44,18 @@ public:
 
     void setAutoStop(uint8_t id, bool enable = true);
 
+    /**
+     * @brief Sets the new ID of the servo with the given ID.
+    */
     void setId(uint8_t newId, uint8_t destId = 254);
+
+    /**
+     * @brief Gets the ID of the servo with the given ID.
+    */
     uint8_t getId(uint8_t destId = 254);
 
 private:
     SmartServoBus(const SmartServoBus&) = delete;
-
-    void install(uint8_t servo_count);
 
     static void regulatorRoutineTrampoline(void* cookie);
     void regulatorRoutine();

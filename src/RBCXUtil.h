@@ -16,8 +16,16 @@ template <typename T> T clamp(T value, T min, T max) {
     return value;
 }
 
+/**
+ * @brief Delay for given number of milliseconds. Like Arduino's `delay()`
+ * @param ms
+ */
 inline void delayMs(int ms) { vTaskDelay(ms / portTICK_PERIOD_MS); }
 
+/**
+ * @brief Delay for given number of microseconds. Like Arduino's `delayMicroseconds()`
+ * @param us
+ */
 inline void delay(std::chrono::duration<uint32_t, std::milli> delay) {
     vTaskDelay(delay.count() / portTICK_PERIOD_MS);
 }

@@ -11,10 +11,10 @@ class Piezo {
     friend class Manager;
 
 public:
-    void start() { setState(true); }
-    void stop() { setState(false); }
+    void start() { setState(true); } //!< Starts the piezo.
+    void stop() { setState(false); } //!< Stops the piezo.
 
-    void setState(bool on);
+    void setState(bool on); //!< Sets the piezo state (on/off).
 
 private:
     Piezo();
