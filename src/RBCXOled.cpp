@@ -67,18 +67,8 @@ void Oled::writeString(const char* str, OledFontDef Font, OledColor color) {
                          .color = CoprocReq_OledColor(color),
                      } } };
     strncpy(msg.oledCmd.writeString.text, str, 33);
-    sendOledReq(msg);
-}
-
-void Oled::writeString(char* str, OledFontDef Font, OledColor color) {
-    auto msg = CoprocReq_OledReq { .which_oledCmd
-        = CoprocReq_OledReq_writeString_tag,
-        .oledCmd = { .writeString = {
-                         .text = {},
-                         .font = CoprocReq_OledFont(Font),
-                         .color = CoprocReq_OledColor(color),
-                     } } };
-    strncpy(msg.oledCmd.writeString.text, str, 33);
+    snprintf(msg.oledCmd.writeString.text, sizeof(msg.oledCmd.writeString.text),
+        "%s", str);
     sendOledReq(msg);
 }
 

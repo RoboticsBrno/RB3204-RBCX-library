@@ -90,11 +90,14 @@ void Mpu::calculateAcc(const CoprocStat_MpuVector& accel) {
 }
 
 void Mpu::calculateGyro(const CoprocStat_MpuVector& gyro) {
-    m_mpuMotion.gyro.x = (((float)gyro.x / m_compressCoef) * MPU_GYRO_FACTOR_250)
+    m_mpuMotion.gyro.x
+        = (((float)gyro.x / m_compressCoef) * MPU_GYRO_FACTOR_250)
         - m_mpuMotionOffset.gyro.x;
-    m_mpuMotion.gyro.y = (((float)gyro.y / m_compressCoef) * MPU_GYRO_FACTOR_250)
+    m_mpuMotion.gyro.y
+        = (((float)gyro.y / m_compressCoef) * MPU_GYRO_FACTOR_250)
         - m_mpuMotionOffset.gyro.y;
-    m_mpuMotion.gyro.z = (((float)gyro.z / m_compressCoef) * MPU_GYRO_FACTOR_250)
+    m_mpuMotion.gyro.z
+        = (((float)gyro.z / m_compressCoef) * MPU_GYRO_FACTOR_250)
         - m_mpuMotionOffset.gyro.z;
 }
 
@@ -173,10 +176,12 @@ long Mpu::getInterval() { return m_interval; }
 
 void Mpu::setCompressCoef(uint8_t coef) {
     sendMpuReq(
-        CoprocReq_MpuReq { .which_mpuCmd = CoprocReq_MpuReq_setCompressCoef_tag,
+        CoprocReq_MpuReq {
+            .which_mpuCmd = CoprocReq_MpuReq_setCompressCoef_tag,
             .mpuCmd = {
                 .setCompressCoef = coef,
-            } });
+            },
+        });
 }
 
 uint8_t Mpu::getCompressCoef() { return m_compressCoef; }
@@ -184,10 +189,15 @@ uint8_t Mpu::getCompressCoef() { return m_compressCoef; }
 void Mpu::sendMpuReq(CoprocReq_MpuReq mpuReq) {
     rb::Manager::get().sendToCoproc(CoprocReq {
         .which_payload = CoprocReq_i2cReq_tag,
-        .payload = { .i2cReq = { .which_payload = CoprocReq_I2cReq_mpuReq_tag,
-                         .payload = {
-                             .mpuReq = mpuReq,
-                         } } } });
+        .payload = {
+            .i2cReq = {
+                .which_payload = CoprocReq_I2cReq_mpuReq_tag,
+                .payload = {
+                    .mpuReq = mpuReq,
+                },
+            },
+        },
+    });
 }
 
 }; //namespace rb

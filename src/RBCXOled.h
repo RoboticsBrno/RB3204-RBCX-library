@@ -35,7 +35,6 @@ public:
     void drawPixel(uint8_t x, uint8_t y, OledColor color = White);
     void writeString(
         const char* str, OledFontDef Font, OledColor color = White);
-    void writeString(char* str, OledFontDef Font, OledColor color = White);
     void writeString(
         std::string& str, OledFontDef Font, OledColor color = White);
     void setCursor(uint8_t x, uint8_t y);

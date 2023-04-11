@@ -240,15 +240,15 @@ bool Manager::printTasksDebugInfo() {
 void Manager::fault(CoprocStat_FaultStat faultStat) {
     switch (faultStat.which_fault) {
     case CoprocStat_FaultStat_oledFault_tag:
-        printf("Oled not connected\n");
+        ESP_LOGE(TAG, "Oled not connected");
         break;
 
     case CoprocStat_FaultStat_mpuFault_tag:
-        printf("MPU6050 not connected\n");
+        ESP_LOGE(TAG, "MPU6050 not connected");
         break;
 
     default:
-        printf("Non specific error\n");
+        ESP_LOGE(TAG, "CoprocStat - non specific error");
     }
 }
 

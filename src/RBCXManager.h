@@ -95,10 +95,9 @@ public:
 
     StupidServo& stupidServo(uint8_t index) { return m_stupidServos[index]; }
 
-
     Oled& oled() { return m_oled; } //!< Get the {@link Piezo} controller
     Mpu& mpu() { return m_mpu; } //!< Get the {@link Piezo} controller
-    
+
     // SmartServoBus& smartServoBus() { return m_smartServoBus; } //!< Not implemented yet!
 
     Piezo& piezo() { return m_piezo; } //!< Get the {@link Piezo} controller
