@@ -1,5 +1,5 @@
-#include "RBCXManager.h"
 #include "RBCXOled.h"
+#include "RBCXManager.h"
 
 #include "rbcx.pb.h"
 

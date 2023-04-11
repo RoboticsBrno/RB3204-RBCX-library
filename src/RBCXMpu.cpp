@@ -1,7 +1,6 @@
-#include "RBCXManager.h"
 #include "RBCXMpu.h"
 
-#include "rbcx.pb.h"
+#include "RBCXManager.h"
 
 // Constant to convert raw temperature to Celsius degrees
 static constexpr float MPU6050_TEMP_LINEAR_COEF = 1.0 / 340.00;

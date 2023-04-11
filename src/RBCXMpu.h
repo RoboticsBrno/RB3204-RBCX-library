@@ -1,6 +1,5 @@
 #pragma once
-
-
+#include "rbcx.pb.h"
 namespace rb {
 
 typedef struct MpuVector {
@@ -32,7 +31,6 @@ class Mpu {
     friend class Manager;
 
 public:
-
     /**
      * @brief Initialize the Mpu. This function must be called before using the Mpu.
      * It will send a request to the coprocessor to initialize the Mpu.
@@ -83,8 +81,6 @@ public:
      */
     float getAccZ();
 
-
-
     /**
      * @brief Get the Mpu gyroscope data.
      * @return The Mpu gyroscope data.
@@ -109,8 +105,6 @@ public:
      */
     float getGyroZ();
 
-
-
     /**
      * @brief Get the Mpu angle data.
      * @return The Mpu angle data.
@@ -134,7 +128,6 @@ public:
      * @return The Mpu angle data on the Z axis.
      */
     float getAngleZ();
-
 
     /**
      * @brief Get the Mpu sending interval.

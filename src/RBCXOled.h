@@ -1,5 +1,6 @@
 #pragma once
 
+#include "rbcx.pb.h"
 #include <string>
 
 namespace rb {

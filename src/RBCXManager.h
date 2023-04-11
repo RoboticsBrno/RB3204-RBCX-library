@@ -1,8 +1,10 @@
 #pragma once
 
+// clang-format off
 #include <freertos/FreeRTOS.h>
 #include <freertos/queue.h>
 #include "freertos/semphr.h"
+// clang-format on
 #include <functional>
 #include <list>
 #include <memory>
@@ -20,7 +22,6 @@
 #include "RBCXStupidServo.h"
 #include "RBCXTimers.h"
 #include "RBCXUltrasound.h"
-#include "RBCXStupidServo.h"
 
 #include "coproc_link_parser.h"
 #include "rbcx.pb.h"
