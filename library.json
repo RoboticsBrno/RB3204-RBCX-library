@@ -28,7 +28,7 @@
     "dependencies": [
         {
             "name": "RB3204-RBCX-coproc-comm",
-            "version": "https://github.com/RoboticsBrno/RB3204-RBCX-coproc-comm/archive/039f2ae62d14ca7d05cdb194439514a92bbaaa78.zip"
+            "version": "https://github.com/RoboticsBrno/RB3204-RBCX-coproc-comm/archive/194c3b21ad77bd95f136b0146384bc7a34bc50b9.zip"
         }
     ],
     "version": "1.2.3",
