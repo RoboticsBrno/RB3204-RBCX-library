@@ -75,13 +75,33 @@ void Manager::install(
         managerLoopStackSize, this, 5, &task);
     monitorTask(task);
 
-    sendToCoproc(CoprocReq { .which_payload = CoprocReq_versionReq_tag });
-    sendToCoproc(CoprocReq { .which_payload = CoprocReq_getButtons_tag });
+    // One day, when the version of FW with CoprocReq_coprocStartupMessage_tag
+    // is everywhere, we can drop this one.
+    sendToCoproc(CoprocReq { .which_payload = CoprocReq_versionReq_tag } );
 
     if (xSemaphoreTake(m_coprocSemaphore, pdMS_TO_TICKS(300)) != pdTRUE) {
         ESP_LOGE(TAG,
             "failed to acquire FW version from STM32, message not received in "
             "300ms.\n");
+    }
+
+    if(m_coprocFwVersion.number >= 0x010200) {
+        sendToCoproc(CoprocReq {
+            .which_payload = CoprocReq_coprocStartupMessage_tag,
+            .payload = {
+                .coprocStartupMessage = {
+                    .getButtons = true,
+                    .getVersion = false,
+                    .getRtc = false,
+                    .has_espWatchdogSettings = true,
+                    .espWatchdogSettings = {
+                        .disable = (flags & MAN_DISABLE_ESP_WATCHDOG) != 0,
+                    },
+                },
+            },
+        });
+    } else {
+        sendToCoproc(CoprocReq { .which_payload = CoprocReq_getButtons_tag } );
     }
 
 #ifdef RB_DEBUG_MONITOR_TASKS

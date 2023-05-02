@@ -33,6 +33,12 @@ enum ManagerInstallFlags {
     //!< Disables automatic motor failsafe, which stops the motors
     //!< after 300ms of no set motor power calls.
     MAN_DISABLE_MOTOR_FAILSAFE = (1 << 0),
+
+    //!< Disables the watchdog on STM32 coprocessor, which resets the
+    //!< ESP32 and stops all peripherials if ESP32 does not respond in time.
+    //!< The watchdog is disabled by default, but this library enables it on start
+    //!< (unless this flag is used) and it stays on through ESP32 restarts.
+    MAN_DISABLE_ESP_WATCHDOG = (1 << 1),
 };
 
 inline ManagerInstallFlags operator|(
