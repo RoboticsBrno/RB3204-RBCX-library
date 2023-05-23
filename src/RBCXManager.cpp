@@ -156,6 +156,9 @@ void Manager::consumerRoutine() {
             }
             break;
         }
+        case CoprocStat_smartServoStat_tag:
+            m_smartServoBusBackend.onCoprocStat(msg.payload.smartServoStat);
+            break;
 
         case CoprocStat_ledsStat_tag:
         case CoprocStat_stupidServoStat_tag:

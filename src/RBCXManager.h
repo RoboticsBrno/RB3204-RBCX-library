@@ -14,10 +14,10 @@
 #include "RBCXLeds.h"
 #include "RBCXMotor.h"
 #include "RBCXPiezo.h"
-#include "RBCXSmartServo.h"
 #include "RBCXStupidServo.h"
 #include "RBCXTimers.h"
 #include "RBCXUltrasound.h"
+#include "RBCXSmartServoBusBackend.h"
 #include "RBCXStupidServo.h"
 
 #include "coproc_link_parser.h"
@@ -99,7 +99,8 @@ public:
 
     StupidServo& stupidServo(uint8_t index) { return m_stupidServos[index]; }
 
-    // SmartServoBus& smartServoBus() { return m_smartServoBus; } //!< Not implemented yet!
+    // Pass to Esp32-lx16a library's begin()
+    SmartServoBusBackend &smartServoBusBackend() { return m_smartServoBusBackend; }
 
     Piezo& piezo() { return m_piezo; } //!< Get the {@link Piezo} controller
     Battery& battery() {
@@ -176,10 +177,9 @@ private:
     rb::Leds m_leds;
     rb::Buttons m_buttons;
     rb::Battery m_battery;
-    //rb::SmartServoBus m_servos;
     rb::Ultrasound m_ultrasounds[UltrasoundsCount];
     rb::StupidServo m_stupidServos[StupidServosCount];
-    // rb::SmartServoBus m_smartServoBus; //!< Not implemented yet!
+    rb::SmartServoBusBackend m_smartServoBusBackend;
 };
 
 /**

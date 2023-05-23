@@ -28,10 +28,14 @@
     "dependencies": [
         {
             "name": "RB3204-RBCX-coproc-comm",
-            "version": "https://github.com/RoboticsBrno/RB3204-RBCX-coproc-comm/archive/194c3b21ad77bd95f136b0146384bc7a34bc50b9.zip"
+            "version": "https://github.com/RoboticsBrno/RB3204-RBCX-coproc-comm/archive/f55688a63d68c5171bfa8225d570eb080934e017.zip"
+        },
+        {
+            "name": "Esp32-lx16a",
+            "version": "https://github.com/RoboticsBrno/Esp32-lx16a/archive/refs/tags/v1.2.0.zip"
         }
     ],
-    "version": "1.2.3",
+    "version": "1.3.0",
     "frameworks": [
         "espidf",
         "arduino"
