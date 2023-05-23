@@ -150,6 +150,7 @@ Enumerations</h2></td></tr>
 <tr class="separator:a351d5716af4d88ace3b147e493c0230e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af3f24c8ea16e1a669a5d4d936ac071ea"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerb.html#af3f24c8ea16e1a669a5d4d936ac071ea">ManagerInstallFlags</a> { <a class="el" href="namespacerb.html#af3f24c8ea16e1a669a5d4d936ac071eaaf951b3337789f86d3aa71d5b612cc489">MAN_NONE</a> = 0
 , <a class="el" href="namespacerb.html#af3f24c8ea16e1a669a5d4d936ac071eaae0e87ec183241e195ce754d3bb74ff03">MAN_DISABLE_MOTOR_FAILSAFE</a> = (1 &lt;&lt; 0)
+, <a class="el" href="namespacerb.html#af3f24c8ea16e1a669a5d4d936ac071eaa7ec0fd956fca85221d7c8a350dcb7121">MAN_DISABLE_ESP_WATCHDOG</a> = (1 &lt;&lt; 1)
  }</td></tr>
 <tr class="memdesc:af3f24c8ea16e1a669a5d4d936ac071ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum contains flags for the Manager's install() method.  <a href="namespacerb.html#af3f24c8ea16e1a669a5d4d936ac071ea">More...</a><br /></td></tr>
 <tr class="separator:af3f24c8ea16e1a669a5d4d936ac071ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -280,7 +281,9 @@ Variables</h2></td></tr>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="af3f24c8ea16e1a669a5d4d936ac071eaaf951b3337789f86d3aa71d5b612cc489" name="af3f24c8ea16e1a669a5d4d936ac071eaaf951b3337789f86d3aa71d5b612cc489"></a>MAN_NONE&#160;</td><td class="fielddoc"><p >Disables automatic motor failsafe, which stops the motors after 300ms of no set motor power calls. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="af3f24c8ea16e1a669a5d4d936ac071eaae0e87ec183241e195ce754d3bb74ff03" name="af3f24c8ea16e1a669a5d4d936ac071eaae0e87ec183241e195ce754d3bb74ff03"></a>MAN_DISABLE_MOTOR_FAILSAFE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af3f24c8ea16e1a669a5d4d936ac071eaae0e87ec183241e195ce754d3bb74ff03" name="af3f24c8ea16e1a669a5d4d936ac071eaae0e87ec183241e195ce754d3bb74ff03"></a>MAN_DISABLE_MOTOR_FAILSAFE&#160;</td><td class="fielddoc"><p >Disables the watchdog on STM32 coprocessor, which resets the ESP32 and stops all peripherials if ESP32 does not respond in time. The watchdog is disabled by default, but this library enables it on start (unless this flag is used) and it stays on through ESP32 restarts. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af3f24c8ea16e1a669a5d4d936ac071eaa7ec0fd956fca85221d7c8a350dcb7121" name="af3f24c8ea16e1a669a5d4d936ac071eaa7ec0fd956fca85221d7c8a350dcb7121"></a>MAN_DISABLE_ESP_WATCHDOG&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>
@@ -772,7 +775,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 7 2023 12:15:59 for RBCX by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5
+Generated on Tue May 23 2023 17:21:49 for RBCX by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5
 </small></address>
 </body>
 </html>
