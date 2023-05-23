@@ -4,6 +4,6 @@
 #define RB3204_RBCX
 #define RBCX
 
-#define RB3204_MAJOR 0
-#define RB3204_MINOR 0
-#define RB3204_PATCH 2
+#define RB3204_MAJOR 1
+#define RB3204_MINOR 3
+#define RB3204_PATCH 0
