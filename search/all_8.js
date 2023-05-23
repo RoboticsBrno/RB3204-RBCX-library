@@ -10,6 +10,5 @@ var searchData=
   ['leds_7',['leds',['../classrb_1_1Manager.html#a7fac6ef68183d6ab9ff7cd047312603b',1,'rb::Manager']]],
   ['leds_8',['Leds',['../classrb_1_1Leds.html',1,'rb']]],
   ['left_9',['left',['../classrb_1_1Buttons.html#a2a9483eef433fd7ea079424ac6cded30',1,'rb::Buttons']]],
-  ['left_10',['Left',['../namespacerb.html#a4fd9ce2bf8b0c12e000107573f8f4c4ea7b6188c7aab22158c23b50706db56ac0',1,'rb']]],
-  ['limit_11',['limit',['../classrb_1_1SmartServoBus.html#a81f3ef8743007b797ea9551ccb4c6381',1,'rb::SmartServoBus']]]
+  ['left_10',['Left',['../namespacerb.html#a4fd9ce2bf8b0c12e000107573f8f4c4ea7b6188c7aab22158c23b50706db56ac0',1,'rb']]]
 ];

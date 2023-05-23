@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.5"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>RBCX: rb::Piezo Class Reference</title>
+<title>RBCX: rb::SmartServoBusBackend Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -70,114 +70,82 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="namespacerb.html">rb</a></li><li class="navelem"><a class="el" href="classrb_1_1Piezo.html">Piezo</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespacerb.html">rb</a></li><li class="navelem"><a class="el" href="classrb_1_1SmartServoBusBackend.html">SmartServoBusBackend</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#friends">Friends</a> &#124;
-<a href="classrb_1_1Piezo-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">rb::Piezo Class Reference</div></div>
+<a href="classrb_1_1SmartServoBusBackend-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">rb::SmartServoBusBackend Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>Helper class for controlling the piezo.  
- <a href="classrb_1_1Piezo.html#details">More...</a></p>
-
-<p><code>#include &lt;<a class="el" href="RBCXPiezo_8h_source.html">RBCXPiezo.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="RBCXSmartServoBusBackend_8h_source.html">RBCXSmartServoBusBackend.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for rb::SmartServoBusBackend:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classrb_1_1SmartServoBusBackend.png" alt=""/>
+ </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aeb6988392944e06661006fca9dc3a7f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrb_1_1Piezo.html#aeb6988392944e06661006fca9dc3a7f9">start</a> ()</td></tr>
-<tr class="memdesc:aeb6988392944e06661006fca9dc3a7f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the piezo.  <a href="classrb_1_1Piezo.html#aeb6988392944e06661006fca9dc3a7f9">More...</a><br /></td></tr>
-<tr class="separator:aeb6988392944e06661006fca9dc3a7f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4665cb021c295ac72b80c31ff2c440be"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrb_1_1Piezo.html#a4665cb021c295ac72b80c31ff2c440be">stop</a> ()</td></tr>
-<tr class="memdesc:a4665cb021c295ac72b80c31ff2c440be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops the piezo.  <a href="classrb_1_1Piezo.html#a4665cb021c295ac72b80c31ff2c440be">More...</a><br /></td></tr>
-<tr class="separator:a4665cb021c295ac72b80c31ff2c440be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f9c85c5c23538b9eceb2a06d0c4e540"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrb_1_1Piezo.html#a2f9c85c5c23538b9eceb2a06d0c4e540">setState</a> (bool on)</td></tr>
-<tr class="memdesc:a2f9c85c5c23538b9eceb2a06d0c4e540"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the piezo state (on/off).  <a href="classrb_1_1Piezo.html#a2f9c85c5c23538b9eceb2a06d0c4e540">More...</a><br /></td></tr>
-<tr class="separator:a2f9c85c5c23538b9eceb2a06d0c4e540"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abce28e1b3a42e3b0f197116a4d3f8d8e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrb_1_1SmartServoBusBackend.html#abce28e1b3a42e3b0f197116a4d3f8d8e">send</a> (const lw::Packet &amp;pkt, QueueHandle_t responseQueue=NULL, bool expect_response=false, bool priority=false)</td></tr>
+<tr class="separator:abce28e1b3a42e3b0f197116a4d3f8d8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
 Friends</h2></td></tr>
-<tr class="memitem:adddd5c43ff870a047aa66db4edf82a7e"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrb_1_1Piezo.html#adddd5c43ff870a047aa66db4edf82a7e">Manager</a></td></tr>
+<tr class="memitem:adddd5c43ff870a047aa66db4edf82a7e"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrb_1_1SmartServoBusBackend.html#adddd5c43ff870a047aa66db4edf82a7e">Manager</a></td></tr>
 <tr class="separator:adddd5c43ff870a047aa66db4edf82a7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >Helper class for controlling the piezo. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a2f9c85c5c23538b9eceb2a06d0c4e540" name="a2f9c85c5c23538b9eceb2a06d0c4e540"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2f9c85c5c23538b9eceb2a06d0c4e540">&#9670;&#160;</a></span>setState()</h2>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="abce28e1b3a42e3b0f197116a4d3f8d8e" name="abce28e1b3a42e3b0f197116a4d3f8d8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abce28e1b3a42e3b0f197116a4d3f8d8e">&#9670;&#160;</a></span>send()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void rb::Piezo::setState </td>
+          <td class="memname">void rb::SmartServoBusBackend::send </td>
           <td>(</td>
+          <td class="paramtype">const lw::Packet &amp;&#160;</td>
+          <td class="paramname"><em>pkt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QueueHandle_t&#160;</td>
+          <td class="paramname"><em>responseQueue</em> = <code>NULL</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>on</em></td><td>)</td>
-          <td></td>
+          <td class="paramname"><em>expect_response</em> = <code>false</code>, </td>
         </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Sets the piezo state (on/off). </p>
-
-</div>
-</div>
-<a id="aeb6988392944e06661006fca9dc3a7f9" name="aeb6988392944e06661006fca9dc3a7f9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeb6988392944e06661006fca9dc3a7f9">&#9670;&#160;</a></span>start()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
         <tr>
-          <td class="memname">void rb::Piezo::start </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>priority</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Starts the piezo. </p>
-
-</div>
-</div>
-<a id="a4665cb021c295ac72b80c31ff2c440be" name="a4665cb021c295ac72b80c31ff2c440be"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4665cb021c295ac72b80c31ff2c440be">&#9670;&#160;</a></span>stop()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void rb::Piezo::stop </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Stops the piezo. </p>
 
 </div>
 </div>
@@ -205,8 +173,8 @@ Friends</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li><a class="el" href="RBCXPiezo_8h_source.html">RBCXPiezo.h</a></li>
-<li><a class="el" href="RBCXPiezo_8cpp.html">RBCXPiezo.cpp</a></li>
+<li><a class="el" href="RBCXSmartServoBusBackend_8h_source.html">RBCXSmartServoBusBackend.h</a></li>
+<li><a class="el" href="RBCXSmartServoBusBackend_8cpp.html">RBCXSmartServoBusBackend.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
