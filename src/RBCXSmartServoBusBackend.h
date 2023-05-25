@@ -10,6 +10,7 @@ class Manager;
 
 class SmartServoBusBackend : public lx16a::BusBackend {
     friend class Manager;
+
 public:
     virtual void send(const lw::Packet& pkt, QueueHandle_t responseQueue = NULL,
         bool expect_response = false, bool priority = false);
