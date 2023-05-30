@@ -35,10 +35,6 @@ void Manager::install(
         m_ultrasounds[i].init(i);
     }
 
-    for (int i = 0; i < StupidServosCount; ++i) {
-        m_stupidServos[i].setId(i);
-    }
-
     for (MotorId id = MotorId::M1; id < MotorId::MAX; ++id) {
         m_motors[size_t(id)].setId(id);
     }
@@ -108,11 +104,6 @@ void Manager::install(
     schedule(10000, [&]() { return printTasksDebugInfo(); });
 #endif
 }
-
-/*rb::SmartServoBus& Manager::initSmartServoBus(uint8_t servo_count) {
-    m_servos.install(servo_count);
-    return m_servos;
-}*/
 
 void Manager::consumerRoutineTrampoline(void* cookie) {
     ((Manager*)cookie)->consumerRoutine();
@@ -210,6 +201,22 @@ void Manager::coprocFwVersionAssert(uint32_t minVersion, const char* name) {
         abort();
     }
 }
+
+SmartServoBusBackend &Manager::smartServoBusBackend() {
+    coprocFwVersionAssert(0x010200, "smart servos tunnel");
+    return m_smartServoBusBackend;
+}
+
+StupidServo& Manager::stupidServo(uint8_t index) {
+    static StupidServo stupidServos[StupidServosCount] = {
+        {0},
+        {1},
+        {2},
+        {3},
+    };
+    return stupidServos[index];
+}
+
 
 void Manager::resetMotorsFailSafe() { m_motors_last_set = xTaskGetTickCount(); }
 

@@ -25,11 +25,9 @@ public:
     void disable();
 
 private:
-    StupidServo();
+    StupidServo(uint8_t id);
     ~StupidServo() {}
     StupidServo(const StupidServo&) = delete;
-
-    void setId(uint8_t id) { m_id = id; }
 
     void sendServoMsg(float position);
 
