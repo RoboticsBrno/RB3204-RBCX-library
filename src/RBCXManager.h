@@ -97,10 +97,10 @@ public:
 
     Ultrasound& ultrasound(uint8_t index) { return m_ultrasounds[index]; }
 
-    StupidServo& stupidServo(uint8_t index) { return m_stupidServos[index]; }
+    StupidServo& stupidServo(uint8_t index);
 
     // Pass to Esp32-lx16a library's begin()
-    SmartServoBusBackend &smartServoBusBackend() { return m_smartServoBusBackend; }
+    SmartServoBusBackend &smartServoBusBackend();
 
     Piezo& piezo() { return m_piezo; } //!< Get the {@link Piezo} controller
     Battery& battery() {
@@ -112,6 +112,7 @@ public:
     Motor& motor(MotorId id) {
         return m_motors[static_cast<int>(id)];
     }; //!< Get a motor instance
+
     MotorChangeBuilder
     setMotors(); //!< Create motor power change builder: {@link MotorChangeBuilder}.
 
@@ -178,7 +179,6 @@ private:
     rb::Buttons m_buttons;
     rb::Battery m_battery;
     rb::Ultrasound m_ultrasounds[UltrasoundsCount];
-    rb::StupidServo m_stupidServos[StupidServosCount];
     rb::SmartServoBusBackend m_smartServoBusBackend;
 };
 

@@ -18,13 +18,18 @@ SmartServoBusBackend::~SmartServoBusBackend() {
 void SmartServoBusBackend::send(const lw::Packet& pkt,
     QueueHandle_t responseQueue, bool expect_response, bool priority) {
 
-    CoprocReq req = { .which_payload = CoprocReq_smartServoReq_tag,
+    if(pkt._data.size() > sizeof(CoprocReq_SmartServoReq_data_t::bytes)) {
+        ESP_LOGE(TAG, "SmartServo packet too big, %d > %d", pkt._data.size(), sizeof(CoprocReq_SmartServoReq_data_t::bytes));
+        return;
+    }
+
+    CoprocReq req = {
+        .which_payload = CoprocReq_smartServoReq_tag,
         .payload = {
             .smartServoReq = {
-                .id = pkt.id(),
                 .expect_response = expect_response,
                 .data = {
-                    .size = (pb_size_t)(pkt.size() - 2),
+                    .size = (pb_size_t)(pkt._data.size()),
                     .bytes = {},
                 },
             },
@@ -32,7 +37,8 @@ void SmartServoBusBackend::send(const lw::Packet& pkt,
     };
 
     auto& servoReq = req.payload.smartServoReq;
-    memcpy(servoReq.data.bytes, pkt._data.data() + 4, pkt.size() - 2);
+    memcpy(servoReq.data.bytes, pkt._data.data(), pkt._data.size());
+
     if (xQueueSend(m_responseQueueQueue, &responseQueue, pdMS_TO_TICKS(1000))
         == pdFALSE) {
         ESP_LOGE(TAG,
@@ -52,12 +58,8 @@ void SmartServoBusBackend::onCoprocStat(const CoprocStat_SmartServoStat& msg) {
     }
 
     BusBackend::rx_response resp;
-    resp.size = msg.data.size + 4;
-    resp.data[0] = 0x55;
-    resp.data[1] = 0x55;
-    resp.data[2] = msg.id;
-    resp.data[3] = msg.data.size + 1;
-    memcpy(resp.data + 4, msg.data.bytes, msg.data.size);
+    resp.size = msg.data.size;
+    memcpy(resp.data, msg.data.bytes, msg.data.size);
 
     xQueueSend(responseQueue, &resp, 300 / portTICK_PERIOD_MS);
 }
