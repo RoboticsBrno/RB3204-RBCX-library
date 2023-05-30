@@ -30,7 +30,6 @@ void SmartServoBusBackend::send(const lw::Packet& pkt,
                 .expect_response = expect_response,
                 .data = {
                     .size = (pb_size_t)(pkt._data.size()),
-                    .bytes = {},
                 },
             },
         },
