@@ -97,20 +97,18 @@ $(function() {
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classrb_1_1StupidServo.html#a235896ed7a1b0b2d90afbd0545d09c5f">disable</a>();</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <a class="code hl_class" href="classrb_1_1StupidServo.html">StupidServo</a>();</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <a class="code hl_class" href="classrb_1_1StupidServo.html">StupidServo</a>(uint8_t <span class="keywordtype">id</span>);</div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <a class="code hl_class" href="classrb_1_1StupidServo.html">~StupidServo</a>() {}</div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    StupidServo(<span class="keyword">const</span> StupidServo&amp;) = <span class="keyword">delete</span>;</div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keywordtype">void</span> setId(uint8_t <span class="keywordtype">id</span>) { m_id = <a class="code hl_function" href="classrb_1_1StupidServo.html#a67783e76f064e8dc3442614c888614f6">id</a>; }</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keywordtype">void</span> sendServoMsg(<span class="keywordtype">float</span> <a class="code hl_function" href="classrb_1_1StupidServo.html#aadadc359f54dbac7e23ce4783acd3420">position</a>);</div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keywordtype">void</span> sendServoMsg(<span class="keywordtype">float</span> <a class="code hl_function" href="classrb_1_1StupidServo.html#aadadc359f54dbac7e23ce4783acd3420">position</a>);</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    std::mutex m_mutex;</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keywordtype">float</span> m_lastPosition;</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    uint8_t m_id;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    std::mutex m_mutex;</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="keywordtype">float</span> m_lastPosition;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    uint8_t m_id;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>};</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>};</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>};</div>
 <div class="ttc" id="aclassrb_1_1Manager_html"><div class="ttname"><a href="classrb_1_1Manager.html">rb::Manager</a></div><div class="ttdoc">The main library class for working with the RBCX board. Call the install() method at the start of you...</div><div class="ttdef"><b>Definition:</b> RBCXManager.h:57</div></div>
 <div class="ttc" id="aclassrb_1_1StupidServo_html"><div class="ttname"><a href="classrb_1_1StupidServo.html">rb::StupidServo</a></div><div class="ttdef"><b>Definition:</b> RBCXStupidServo.h:12</div></div>
 <div class="ttc" id="aclassrb_1_1StupidServo_html_a235896ed7a1b0b2d90afbd0545d09c5f"><div class="ttname"><a href="classrb_1_1StupidServo.html#a235896ed7a1b0b2d90afbd0545d09c5f">rb::StupidServo::disable</a></div><div class="ttdeci">void disable()</div><div class="ttdef"><b>Definition:</b> RBCXStupidServo.cpp:11</div></div>
@@ -121,7 +119,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu May 25 2023 18:03:56 for RBCX by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5
+Generated on Tue May 30 2023 18:01:52 for RBCX by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5
 </small></address>
 </body>
 </html>
