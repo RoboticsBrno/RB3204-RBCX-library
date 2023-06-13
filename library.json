@@ -1,44 +1,45 @@
 {
-    "name": "RB3204-RBCX-library",
-    "keywords": "ESP32, RBCX, RB3204, Robotarna, RobotikaBrno, RoboticsBrno",
-    "description": "Library for the RB3204-RBCX board with the ESP32 by RoboticsBrno.",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/RoboticsBrno/RB3204-RBCX-library.git"
+  "name": "RB3204-RBCX-library",
+  "keywords": "ESP32, RBCX, RB3204, Robotarna, RobotikaBrno, RoboticsBrno",
+  "description": "Library for the RB3204-RBCX board with the ESP32 by RoboticsBrno.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RoboticsBrno/RB3204-RBCX-library.git"
+  },
+  "authors": [
+    {
+      "name": "Jan Mrázek",
+      "email": "email@honzamrazek.cz",
+      "url": "http://www.robotikabrno.cz"
     },
-    "authors": [
-        {
-            "name": "Jan Mrázek",
-            "email": "email@honzamrazek.cz",
-            "url": "http://www.robotikabrno.cz"
-        },
-        {
-            "name": "Jaroslav Paral",
-            "email": "paral@robotikabrno.cz",
-            "url": "http://www.robotikabrno.cz"
-        },
-        {
-            "name": "Vojtěch Boček",
-            "email": "vbocek@gmail.com",
-            "url": "http://www.robotikabrno.cz",
-            "maintainer": true
-        }
-    ],
-    "dependencies": [
-        {
-            "name": "RB3204-RBCX-coproc-comm",
-            "version": "https://github.com/RoboticsBrno/RB3204-RBCX-coproc-comm/archive/039f2ae62d14ca7d05cdb194439514a92bbaaa78.zip"
-        }
-    ],
-    "version": "1.2.3",
-    "frameworks": [
-        "espidf",
-        "arduino"
-    ],
-    "platforms": "espressif32",
-    "build": {
-        "flags": "-std=c++14",
-        "unflags": "-std=gnu++11"
+    {
+      "name": "Jaroslav Paral",
+      "email": "paral@robotikabrno.cz",
+      "url": "http://www.robotikabrno.cz"
+    },
+    {
+      "name": "Vojtěch Boček",
+      "email": "vbocek@gmail.com",
+      "url": "http://www.robotikabrno.cz",
+      "maintainer": true
     }
+  ],
+  "dependencies": [
+    {
+      "name": "RB3204-RBCX-coproc-comm",
+      "version": "https://github.com/RoboticsBrno/RB3204-RBCX-coproc-comm/archive/1ed2bbc8fda0b9b1c6592f5f39bd9bbb1213d569.zip"
+    },
+    {
+      "name": "Esp32-lx16a",
+      "version": "https://github.com/RoboticsBrno/Esp32-lx16a/archive/refs/tags/v1.2.1.zip"
+    }
+  ],
+  "version": "1.4.1",
+  "frameworks": ["espidf", "arduino"],
+  "platforms": "espressif32",
+  "build": {
+    "flags": "-std=c++14",
+    "unflags": "-std=gnu++11"
+  }
 }

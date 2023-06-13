@@ -35,10 +35,6 @@ void Manager::install(
         m_ultrasounds[i].init(i);
     }
 
-    for (int i = 0; i < StupidServosCount; ++i) {
-        m_stupidServos[i].setId(i);
-    }
-
     for (MotorId id = MotorId::M1; id < MotorId::MAX; ++id) {
         m_motors[size_t(id)].setId(id);
     }
@@ -75,8 +71,9 @@ void Manager::install(
         managerLoopStackSize, this, 5, &task);
     monitorTask(task);
 
-    sendToCoproc(CoprocReq { .which_payload = CoprocReq_versionReq_tag });
-    sendToCoproc(CoprocReq { .which_payload = CoprocReq_getButtons_tag });
+    // One day, when the version of FW with CoprocReq_coprocStartupMessage_tag
+    // is everywhere, we can drop this one.
+    sendToCoproc(CoprocReq { .which_payload = CoprocReq_versionReq_tag } );
 
     if (xSemaphoreTake(m_coprocSemaphore, pdMS_TO_TICKS(300)) != pdTRUE) {
         ESP_LOGE(TAG,
@@ -84,15 +81,29 @@ void Manager::install(
             "300ms.\n");
     }
 
+    if(m_coprocFwVersion.number >= 0x010200) {
+        sendToCoproc(CoprocReq {
+            .which_payload = CoprocReq_coprocStartupMessage_tag,
+            .payload = {
+                .coprocStartupMessage = {
+                    .getButtons = true,
+                    .getVersion = false,
+                    .getRtc = false,
+                    .has_espWatchdogSettings = true,
+                    .espWatchdogSettings = {
+                        .disable = (flags & MAN_DISABLE_ESP_WATCHDOG) != 0,
+                    },
+                },
+            },
+        });
+    } else {
+        sendToCoproc(CoprocReq { .which_payload = CoprocReq_getButtons_tag } );
+    }
+
 #ifdef RB_DEBUG_MONITOR_TASKS
     schedule(10000, [&]() { return printTasksDebugInfo(); });
 #endif
 }
-
-/*rb::SmartServoBus& Manager::initSmartServoBus(uint8_t servo_count) {
-    m_servos.install(servo_count);
-    return m_servos;
-}*/
 
 void Manager::consumerRoutineTrampoline(void* cookie) {
     ((Manager*)cookie)->consumerRoutine();
@@ -136,6 +147,9 @@ void Manager::consumerRoutine() {
             }
             break;
         }
+        case CoprocStat_smartServoStat_tag:
+            m_smartServoBusBackend.onCoprocStat(msg.payload.smartServoStat);
+            break;
 
         case CoprocStat_ledsStat_tag:
         case CoprocStat_stupidServoStat_tag:
@@ -193,6 +207,22 @@ void Manager::coprocFwVersionAssert(uint32_t minVersion, const char* name) {
         abort();
     }
 }
+
+SmartServoBusBackend &Manager::smartServoBusBackend() {
+    coprocFwVersionAssert(0x010200, "smart servos tunnel");
+    return m_smartServoBusBackend;
+}
+
+StupidServo& Manager::stupidServo(uint8_t index) {
+    static StupidServo stupidServos[StupidServosCount] = {
+        {0},
+        {1},
+        {2},
+        {3},
+    };
+    return stupidServos[index];
+}
+
 
 void Manager::resetMotorsFailSafe() { m_motors_last_set = xTaskGetTickCount(); }
 

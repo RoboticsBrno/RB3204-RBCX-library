@@ -3,8 +3,8 @@
 
 namespace rb {
 
-StupidServo::StupidServo()
-    : m_lastPosition(NAN) {}
+StupidServo::StupidServo(uint8_t id)
+    : m_lastPosition(NAN), m_id(id) {}
 
 void StupidServo::setPosition(float posFraction) { sendServoMsg(posFraction); }
 

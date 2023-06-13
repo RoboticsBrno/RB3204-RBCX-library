@@ -18,10 +18,11 @@
 #include "RBCXMpu.h"
 #include "RBCXOled.h"
 #include "RBCXPiezo.h"
-#include "RBCXSmartServo.h"
 #include "RBCXStupidServo.h"
 #include "RBCXTimers.h"
 #include "RBCXUltrasound.h"
+#include "RBCXSmartServoBusBackend.h"
+#include "RBCXStupidServo.h"
 
 #include "coproc_link_parser.h"
 #include "rbcx.pb.h"
@@ -36,6 +37,12 @@ enum ManagerInstallFlags {
     //!< Disables automatic motor failsafe, which stops the motors
     //!< after 300ms of no set motor power calls.
     MAN_DISABLE_MOTOR_FAILSAFE = (1 << 0),
+
+    //!< Disables the watchdog on STM32 coprocessor, which resets the
+    //!< ESP32 and stops all peripherials if ESP32 does not respond in time.
+    //!< The watchdog is disabled by default, but this library enables it on start
+    //!< (unless this flag is used) and it stays on through ESP32 restarts.
+    MAN_DISABLE_ESP_WATCHDOG = (1 << 1),
 };
 
 inline ManagerInstallFlags operator|(
@@ -94,12 +101,13 @@ public:
 
     Ultrasound& ultrasound(uint8_t index) { return m_ultrasounds[index]; }
 
-    StupidServo& stupidServo(uint8_t index) { return m_stupidServos[index]; }
+    StupidServo& stupidServo(uint8_t index);
 
     Oled& oled() { return m_oled; } //!< Get the {@link Piezo} controller
     Mpu& mpu() { return m_mpu; } //!< Get the {@link Piezo} controller
 
-    // SmartServoBus& smartServoBus() { return m_smartServoBus; } //!< Not implemented yet!
+    // Pass to Esp32-lx16a library's begin()
+    SmartServoBusBackend &smartServoBusBackend();
 
     Piezo& piezo() { return m_piezo; } //!< Get the {@link Piezo} controller
     Battery& battery() {
@@ -111,6 +119,7 @@ public:
     Motor& motor(MotorId id) {
         return m_motors[static_cast<int>(id)];
     }; //!< Get a motor instance
+
     MotorChangeBuilder
     setMotors(); //!< Create motor power change builder: {@link MotorChangeBuilder}.
 
@@ -179,10 +188,8 @@ private:
     rb::Leds m_leds;
     rb::Buttons m_buttons;
     rb::Battery m_battery;
-    //rb::SmartServoBus m_servos;
     rb::Ultrasound m_ultrasounds[UltrasoundsCount];
-    rb::StupidServo m_stupidServos[StupidServosCount];
-    // rb::SmartServoBus m_smartServoBus; //!< Not implemented yet!
+    rb::SmartServoBusBackend m_smartServoBusBackend;
 };
 
 /**
