@@ -1,8 +1,10 @@
 #pragma once
 
+// clang-format off
 #include <freertos/FreeRTOS.h>
 #include <freertos/queue.h>
 #include "freertos/semphr.h"
+// clang-format on
 #include <functional>
 #include <list>
 #include <memory>
@@ -13,6 +15,8 @@
 #include "RBCXButtons.h"
 #include "RBCXLeds.h"
 #include "RBCXMotor.h"
+#include "RBCXMpu.h"
+#include "RBCXOled.h"
 #include "RBCXPiezo.h"
 #include "RBCXStupidServo.h"
 #include "RBCXTimers.h"
@@ -48,7 +52,7 @@ inline ManagerInstallFlags operator|(
 }
 
 // Periodically print info about all RBCX tasks to the console
-//#define RB_DEBUG_MONITOR_TASKS 1
+// #define RB_DEBUG_MONITOR_TASKS 1
 
 /**
  * \brief The main library class for working with the RBCX board.
@@ -98,6 +102,9 @@ public:
     Ultrasound& ultrasound(uint8_t index) { return m_ultrasounds[index]; }
 
     StupidServo& stupidServo(uint8_t index);
+
+    Oled& oled() { return m_oled; } //!< Get the {@link Piezo} controller
+    Mpu& mpu() { return m_mpu; } //!< Get the {@link Piezo} controller
 
     // Pass to Esp32-lx16a library's begin()
     SmartServoBusBackend &smartServoBusBackend();
@@ -159,6 +166,7 @@ private:
     std::vector<TaskHandle_t> m_tasks;
     std::mutex m_tasks_mutex;
 #endif
+    void fault(CoprocStat_FaultStat faultStat);
 
     TaskHandle_t m_keepaliveTask;
 
@@ -174,6 +182,8 @@ private:
     TickType_t m_motors_last_set;
     Motor m_motors[size_t(MotorId::MAX)];
 
+    rb::Oled m_oled;
+    rb::Mpu m_mpu;
     rb::Piezo m_piezo;
     rb::Leds m_leds;
     rb::Buttons m_buttons;

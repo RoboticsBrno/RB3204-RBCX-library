@@ -39,5 +39,6 @@
 
 # Doxygen export
 doc
+
 .pio
 src/main.cpp
