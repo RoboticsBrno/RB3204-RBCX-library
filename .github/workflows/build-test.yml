@@ -9,6 +9,19 @@ jobs:
       matrix:
         example:
           - examples/motors
+          - examples/motorPower
+          - examples/ultrasoundBasic
+          - examples/motors
+          - examples/oled
+          - examples/motorDriveToPosition
+          - examples/mpu
+          - examples/battery
+          - examples/leds
+          - examples/smartLeds
+          - examples/readEncoderPosition
+          - examples/buzzer
+          - examples/ultrasoundLeds
+          - examples/stupidServos
     steps:
       - uses: actions/checkout@v1
       - name: Set up Python
