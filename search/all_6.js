@@ -1,9 +1,8 @@
 var searchData=
 [
-  ['get_0',['get',['../classrb_1_1Manager.html#a6561411262dda58cae4529f134b34b90',1,'rb::Manager::get()'],['../classrb_1_1Timers.html#a800a6d7e76462bfdea84bfa6dfbe4a28',1,'rb::Timers::get()']]],
-  ['getint_1',['getInt',['../classrb_1_1Nvs.html#a52211ea362c8253327ce9c8de0ae525a',1,'rb::Nvs']]],
-  ['getspeedofsound_2',['getSpeedOfSound',['../classrb_1_1Ultrasound.html#a555728575dac06fbe11b27b46ed3f92a',1,'rb::Ultrasound']]],
-  ['getstring_3',['getString',['../classrb_1_1Nvs.html#a2336dabd5083c1996b89a0d153eaa09c',1,'rb::Nvs']]],
-  ['green_4',['green',['../classrb_1_1Leds.html#a278983244254be7356c76c84d1862ef4',1,'rb::Leds']]],
-  ['green_5',['Green',['../namespacerb.html#a351d5716af4d88ace3b147e493c0230ea528ec0aa73e990a6be2fdc4100a11117',1,'rb']]]
+  ['fill_0',['fill',['../classrb_1_1Oled.html#a9ea8202b84da5b4502a4f46d9dc649a0',1,'rb::Oled']]],
+  ['font_5f11x18_1',['Font_11x18',['../classrb_1_1Oled.html#a91b38f8342944d069127920087176ef5a262df6d66b5124f2b7d3453e0c370670',1,'rb::Oled']]],
+  ['font_5f16x26_2',['Font_16x26',['../classrb_1_1Oled.html#a91b38f8342944d069127920087176ef5abb156b621ecb9d03de456406644e38a0',1,'rb::Oled']]],
+  ['font_5f6x8_3',['Font_6x8',['../classrb_1_1Oled.html#a91b38f8342944d069127920087176ef5a4eecb5a1dbfbde21eb4fb355642328a5',1,'rb::Oled']]],
+  ['font_5f7x10_4',['Font_7x10',['../classrb_1_1Oled.html#a91b38f8342944d069127920087176ef5a41da19c216b77fab5e4d2ff84d4bae33',1,'rb::Oled']]]
 ];

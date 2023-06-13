@@ -1,8 +1,21 @@
 var searchData=
 [
-  ['pct_0',['pct',['../classrb_1_1Battery.html#a88562ff78db7b8f4d75a0c62252ae1f2',1,'rb::Battery']]],
-  ['piezo_1',['piezo',['../classrb_1_1Manager.html#aee67e7920e04845941a4dbc828136b15',1,'rb::Manager']]],
-  ['position_2',['position',['../classrb_1_1Motor.html#a656d53bd1a445041a84feb78e8671d2c',1,'rb::Motor::position()'],['../classrb_1_1StupidServo.html#aadadc359f54dbac7e23ce4783acd3420',1,'rb::StupidServo::position()']]],
-  ['power_3',['power',['../classrb_1_1MotorChangeBuilder.html#ac21271f3221ade65a1247b5e86077136',1,'rb::MotorChangeBuilder::power()'],['../classrb_1_1Motor.html#a4231c6f9df4a912598406359d1b919c6',1,'rb::Motor::power()']]],
-  ['pwmmaxpercent_4',['pwmMaxPercent',['../classrb_1_1MotorChangeBuilder.html#adfd74ad987be641499277fdeced9472c',1,'rb::MotorChangeBuilder::pwmMaxPercent()'],['../classrb_1_1Motor.html#abb7e20994614c514bf8f9679f153b441',1,'rb::Motor::pwmMaxPercent(int8_t percent)'],['../classrb_1_1Motor.html#a009ae376c66370070dcb077e88569a3b',1,'rb::Motor::pwmMaxPercent() const']]]
+  ['off_0',['off',['../classrb_1_1Buttons.html#aaae0c87ed7e6f5fb1388511822f6b6b0',1,'rb::Buttons']]],
+  ['oled_1',['oled',['../classrb_1_1Manager.html#a9412947c39906c0cf79a7b41bcb50b64',1,'rb::Manager']]],
+  ['on_2',['on',['../classrb_1_1Buttons.html#ac31be5b207ff793b753f6bdebaa8519f',1,'rb::Buttons']]],
+  ['onchange_3',['onChange',['../classrb_1_1Buttons.html#a83659c7ace88783c42f00d1fc52b057c',1,'rb::Buttons']]],
+  ['operator_22_22_5fdeg_4',['operator&quot;&quot;_deg',['../namespacerb.html#a9e6176b037747197b984b2a2e8297c97',1,'rb::operator&quot;&quot;_deg(long double d)'],['../namespacerb.html#a89e25a488a1b64f8d217545108d52bc5',1,'rb::operator&quot;&quot;_deg(unsigned long long int d)']]],
+  ['operator_22_22_5frad_5',['operator&quot;&quot;_rad',['../namespacerb.html#a373297dec29db0f608bb2e6631b86c1c',1,'rb::operator&quot;&quot;_rad(long double r)'],['../namespacerb.html#a34985eb5e7350b159f10223db69116ab',1,'rb::operator&quot;&quot;_rad(unsigned long long int r)']]],
+  ['operator_2a_6',['operator*',['../namespacerb.html#aab10a5e9109e9f648729bd3f12224f88',1,'rb']]],
+  ['operator_2a_3d_7',['operator*=',['../classrb_1_1Angle.html#aec97f13db33210cc353b81ca104964df',1,'rb::Angle']]],
+  ['operator_2b_8',['operator+',['../namespacerb.html#af99b28ed19aee47f99c88f274a088cc2',1,'rb']]],
+  ['operator_2b_2b_9',['operator++',['../namespacerb.html#af2627804f5d67a4d5f65f50606e017c8',1,'rb']]],
+  ['operator_2b_3d_10',['operator+=',['../classrb_1_1Angle.html#a0d176e26d15a5ef44d70896d57621049',1,'rb::Angle']]],
+  ['operator_2d_11',['operator-',['../classrb_1_1Angle.html#a99bb67db9dd8a1da1923f02671fe5ad0',1,'rb::Angle::operator-()'],['../namespacerb.html#ace59edd09eaab7f6743f49dba27150f4',1,'rb::operator-(Angle a, Angle b)']]],
+  ['operator_2d_2d_12',['operator--',['../namespacerb.html#aa526b22204c4e175f5b39684658a722f',1,'rb']]],
+  ['operator_2d_3d_13',['operator-=',['../classrb_1_1Angle.html#afcfeb33e51b76cf6367bdd0830037cf6',1,'rb::Angle']]],
+  ['operator_2f_14',['operator/',['../namespacerb.html#adaf022caa1aeb846993e2ddf85450415',1,'rb']]],
+  ['operator_2f_3d_15',['operator/=',['../classrb_1_1Angle.html#a1876cd1fd0b24189c8c37c3dde13d636',1,'rb::Angle']]],
+  ['operator_3d_16',['operator=',['../classrb_1_1Manager.html#afb01225d454a7fcbe6c55e9729251804',1,'rb::Manager']]],
+  ['operator_7c_17',['operator|',['../namespacerb.html#a4bea1e0498bb0090931dbd64d3e5362c',1,'rb']]]
 ];

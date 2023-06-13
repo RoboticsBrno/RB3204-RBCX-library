@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['up_0',['Up',['../namespacerb.html#a4fd9ce2bf8b0c12e000107573f8f4c4eafce1e48e7f48ce2558fe94ccd0bf9ef6',1,'rb']]]
+  ['red_0',['Red',['../namespacerb.html#a351d5716af4d88ace3b147e493c0230ea8436a282e447268fe377473c4fa12716',1,'rb']]],
+  ['right_1',['Right',['../namespacerb.html#a4fd9ce2bf8b0c12e000107573f8f4c4eaa683f2dfb9bb3bbd140a3b460d9bc8a9',1,'rb']]]
 ];

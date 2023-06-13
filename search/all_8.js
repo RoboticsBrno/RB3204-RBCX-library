@@ -1,14 +1,11 @@
 var searchData=
 [
-  ['l1_0',['L1',['../namespacerb.html#a351d5716af4d88ace3b147e493c0230eaaaf47f038d49a750f9dcb299678aad8b',1,'rb']]],
-  ['l2_1',['L2',['../namespacerb.html#a351d5716af4d88ace3b147e493c0230ea57edcca87e7f6763294e5cb2a6e2987a',1,'rb']]],
-  ['l3_2',['L3',['../namespacerb.html#a351d5716af4d88ace3b147e493c0230eaa52e7b42e7e09496c8da1d9234302141',1,'rb']]],
-  ['l4_3',['L4',['../namespacerb.html#a351d5716af4d88ace3b147e493c0230eac29c312f8fc75f62860246632b83fa25',1,'rb']]],
-  ['lastdistancemm_4',['lastDistanceMm',['../classrb_1_1Ultrasound.html#aa9cf90b3368c5c75afa912038081bbb6',1,'rb::Ultrasound']]],
-  ['lastdurationus_5',['lastDurationUs',['../classrb_1_1Ultrasound.html#aa6c9d26a348ae219e2c3e75483e117ff',1,'rb::Ultrasound']]],
-  ['ledid_6',['LedId',['../namespacerb.html#a351d5716af4d88ace3b147e493c0230e',1,'rb']]],
-  ['leds_7',['leds',['../classrb_1_1Manager.html#a7fac6ef68183d6ab9ff7cd047312603b',1,'rb::Manager']]],
-  ['leds_8',['Leds',['../classrb_1_1Leds.html',1,'rb']]],
-  ['left_9',['left',['../classrb_1_1Buttons.html#a2a9483eef433fd7ea079424ac6cded30',1,'rb::Buttons']]],
-  ['left_10',['Left',['../namespacerb.html#a4fd9ce2bf8b0c12e000107573f8f4c4ea7b6188c7aab22158c23b50706db56ac0',1,'rb']]]
+  ['id_0',['id',['../classrb_1_1Motor.html#a0a1380b62cacaff17ceaded5f24c938c',1,'rb::Motor::id()'],['../classrb_1_1StupidServo.html#a67783e76f064e8dc3442614c888614f6',1,'rb::StupidServo::id()']]],
+  ['init_1',['init',['../classrb_1_1Mpu.html#ab739bfb58746f7f61e56b26dc855d568',1,'rb::Mpu::init()'],['../classrb_1_1Oled.html#a4e7bf9da0a96b24e5f4d2729a1859f5f',1,'rb::Oled::init()']]],
+  ['install_2',['install',['../classrb_1_1Manager.html#a1ab28166aa4799726fd0a4fdc8deaf40',1,'rb::Manager']]],
+  ['invalid_5fid_3',['INVALID_ID',['../classrb_1_1Timers.html#ac53aba1f7d100fd8e01973fed7caa833',1,'rb::Timers']]],
+  ['islastmeasurementvalid_4',['isLastMeasurementValid',['../classrb_1_1Ultrasound.html#a7ced1769ee7bc4064d19fa1ff169c0ab',1,'rb::Ultrasound']]],
+  ['isnan_5',['isNaN',['../classrb_1_1Angle.html#a25046983b58f79dae7a88993afaea7ae',1,'rb::Angle']]],
+  ['isontimertask_6',['isOnTimerTask',['../classrb_1_1Timers.html#aca804621eac9459c96ea236fdc3eb0c6',1,'rb::Timers']]],
+  ['ispoweredbybattery_7',['isPoweredByBattery',['../classrb_1_1Battery.html#a091888766260c3efa4cd0a502efa644b',1,'rb::Battery']]]
 ];

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['smartservobusbackend_0',['SmartServoBusBackend',['../classrb_1_1SmartServoBusBackend.html',1,'rb']]],
-  ['stupidservo_1',['StupidServo',['../classrb_1_1StupidServo.html',1,'rb']]]
+  ['piezo_0',['Piezo',['../classrb_1_1Piezo.html',1,'rb']]]
 ];

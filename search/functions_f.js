@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['ultrasound_0',['ultrasound',['../classrb_1_1Manager.html#ab34bff99d48d90af36323d3542c44ce5',1,'rb::Manager']]],
-  ['up_1',['up',['../classrb_1_1Buttons.html#a4b585b626c27275d56264698857a304b',1,'rb::Buttons']]]
+  ['temperaturec_0',['temperatureC',['../classrb_1_1Battery.html#a9540bf9954b6fb6c9058b5fda26214d1',1,'rb::Battery']]],
+  ['timers_1',['timers',['../classrb_1_1Manager.html#a396938fbbdc0b06117846ae8ec45d957',1,'rb::Manager']]]
 ];

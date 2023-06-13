@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['yellow_0',['Yellow',['../namespacerb.html#a351d5716af4d88ace3b147e493c0230ead95c9fec74283d1011f24a416797ebb7',1,'rb']]]
+  ['up_0',['Up',['../namespacerb.html#a4fd9ce2bf8b0c12e000107573f8f4c4eafce1e48e7f48ce2558fe94ccd0bf9ef6',1,'rb']]]
 ];

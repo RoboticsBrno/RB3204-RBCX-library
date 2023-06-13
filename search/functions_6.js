@@ -1,9 +1,23 @@
 var searchData=
 [
-  ['id_0',['id',['../classrb_1_1Motor.html#a0a1380b62cacaff17ceaded5f24c938c',1,'rb::Motor::id()'],['../classrb_1_1StupidServo.html#a67783e76f064e8dc3442614c888614f6',1,'rb::StupidServo::id()']]],
-  ['install_1',['install',['../classrb_1_1Manager.html#a1ab28166aa4799726fd0a4fdc8deaf40',1,'rb::Manager']]],
-  ['islastmeasurementvalid_2',['isLastMeasurementValid',['../classrb_1_1Ultrasound.html#a7ced1769ee7bc4064d19fa1ff169c0ab',1,'rb::Ultrasound']]],
-  ['isnan_3',['isNaN',['../classrb_1_1Angle.html#a25046983b58f79dae7a88993afaea7ae',1,'rb::Angle']]],
-  ['isontimertask_4',['isOnTimerTask',['../classrb_1_1Timers.html#aca804621eac9459c96ea236fdc3eb0c6',1,'rb::Timers']]],
-  ['ispoweredbybattery_5',['isPoweredByBattery',['../classrb_1_1Battery.html#a091888766260c3efa4cd0a502efa644b',1,'rb::Battery']]]
+  ['get_0',['get',['../classrb_1_1Timers.html#a800a6d7e76462bfdea84bfa6dfbe4a28',1,'rb::Timers::get()'],['../classrb_1_1Manager.html#a6561411262dda58cae4529f134b34b90',1,'rb::Manager::get()']]],
+  ['getacc_1',['getAcc',['../classrb_1_1Mpu.html#a3e0745756c1348c82f5d66bd943306c1',1,'rb::Mpu']]],
+  ['getaccx_2',['getAccX',['../classrb_1_1Mpu.html#abd13f2c513011dc48a7d522c340f4fac',1,'rb::Mpu']]],
+  ['getaccy_3',['getAccY',['../classrb_1_1Mpu.html#ae764795e391c6d8f191a6a834942e8cc',1,'rb::Mpu']]],
+  ['getaccz_4',['getAccZ',['../classrb_1_1Mpu.html#a966caaa7d5ca2c7345e7cc13dd7be13c',1,'rb::Mpu']]],
+  ['getangle_5',['getAngle',['../classrb_1_1Mpu.html#a280e6ae0e562e0cdfaaf3db35f5ebbbc',1,'rb::Mpu']]],
+  ['getanglex_6',['getAngleX',['../classrb_1_1Mpu.html#ad274b93120587243b6276f5408b45d4c',1,'rb::Mpu']]],
+  ['getangley_7',['getAngleY',['../classrb_1_1Mpu.html#ab4febf30d05fcf3e60798db0190f4429',1,'rb::Mpu']]],
+  ['getanglez_8',['getAngleZ',['../classrb_1_1Mpu.html#a9af8e17ebc0d4557edf8a64533f9f59c',1,'rb::Mpu']]],
+  ['getcompresscoef_9',['getCompressCoef',['../classrb_1_1Mpu.html#ac4e214b2fabba2e60803ed34ea6e1088',1,'rb::Mpu']]],
+  ['getgyro_10',['getGyro',['../classrb_1_1Mpu.html#a0b8fb11191d9771641a5d714a8cea3ef',1,'rb::Mpu']]],
+  ['getgyrox_11',['getGyroX',['../classrb_1_1Mpu.html#a9717385ff6b8814794f7c03efdc2f91b',1,'rb::Mpu']]],
+  ['getgyroy_12',['getGyroY',['../classrb_1_1Mpu.html#a22eaf685e6a1b40a71287a8df7ff9660',1,'rb::Mpu']]],
+  ['getgyroz_13',['getGyroZ',['../classrb_1_1Mpu.html#a364039d906236faa04ea15b47b60d094',1,'rb::Mpu']]],
+  ['getheight_14',['getHeight',['../classrb_1_1Oled.html#a1618284e1ca06f8cacf6e88867603697',1,'rb::Oled']]],
+  ['getint_15',['getInt',['../classrb_1_1Nvs.html#a52211ea362c8253327ce9c8de0ae525a',1,'rb::Nvs']]],
+  ['getspeedofsound_16',['getSpeedOfSound',['../classrb_1_1Ultrasound.html#a555728575dac06fbe11b27b46ed3f92a',1,'rb::Ultrasound']]],
+  ['getstring_17',['getString',['../classrb_1_1Nvs.html#a2336dabd5083c1996b89a0d153eaa09c',1,'rb::Nvs']]],
+  ['getwidth_18',['getWidth',['../classrb_1_1Oled.html#a8c3f63a852e2c2d69dfeac4708ddf31a',1,'rb::Oled']]],
+  ['green_19',['green',['../classrb_1_1Leds.html#a278983244254be7356c76c84d1862ef4',1,'rb::Leds']]]
 ];

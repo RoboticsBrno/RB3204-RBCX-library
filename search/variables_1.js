@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['count_0',['Count',['../classrb_1_1Buttons.html#a1f04ea286ce3f122056a53c225479b19',1,'rb::Buttons']]]
+  ['battery_5fin_5fthreshold_0',['BATTERY_IN_THRESHOLD',['../classrb_1_1Battery.html#aa44fd2f2530ea4ccfb50df161217c40e',1,'rb::Battery']]]
 ];

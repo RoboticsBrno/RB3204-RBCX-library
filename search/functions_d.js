@@ -1,19 +1,9 @@
 var searchData=
 [
-  ['schedule_0',['schedule',['../classrb_1_1Timers.html#a7816c963a9dea456ea73297353693b6a',1,'rb::Timers::schedule()'],['../classrb_1_1Manager.html#ab8e317b5cb65d14c4777b2ae45351afc',1,'rb::Manager::schedule()']]],
-  ['send_1',['send',['../classrb_1_1SmartServoBusBackend.html#abce28e1b3a42e3b0f197116a4d3f8d8e',1,'rb::SmartServoBusBackend']]],
-  ['sendtocoproc_2',['sendToCoproc',['../classrb_1_1Manager.html#a11779d2a10c101790d22719f18b07dd2',1,'rb::Manager']]],
-  ['set_3',['set',['../classrb_1_1MotorChangeBuilder.html#a11ebf755b9412e2170e66158c4e35a3a',1,'rb::MotorChangeBuilder']]],
-  ['setconfig_4',['setConfig',['../classrb_1_1Motor.html#a6f122e443fb46103139e4c50cae5f6cd',1,'rb::Motor']]],
-  ['setcurrentposition_5',['setCurrentPosition',['../classrb_1_1Motor.html#a3f015ff35c53242047e6e40da13acb94',1,'rb::Motor']]],
-  ['setmotors_6',['setMotors',['../classrb_1_1Manager.html#abb2a07fadc2024cff36ac8b360a379fb',1,'rb::Manager']]],
-  ['setposition_7',['setPosition',['../classrb_1_1StupidServo.html#a324dab8b2d5a7d30d25f26f8aa37ed65',1,'rb::StupidServo']]],
-  ['setspeedofsound_8',['setSpeedOfSound',['../classrb_1_1Ultrasound.html#a15aa97a9f7111e331b9dc3fd1ee5a558',1,'rb::Ultrasound']]],
-  ['setstate_9',['setState',['../classrb_1_1Piezo.html#a2f9c85c5c23538b9eceb2a06d0c4e540',1,'rb::Piezo']]],
-  ['shutdown_10',['shutdown',['../classrb_1_1Battery.html#ac5b28fdad6e57277fc5e5c6750bc39d3',1,'rb::Battery']]],
-  ['smartservobusbackend_11',['smartServoBusBackend',['../classrb_1_1Manager.html#af3e251028d1b6278e1dfbe4a57b389ac',1,'rb::Manager']]],
-  ['speed_12',['speed',['../classrb_1_1MotorChangeBuilder.html#adacc07cac8d24415fc83013d2adc98b1',1,'rb::MotorChangeBuilder::speed()'],['../classrb_1_1Motor.html#a81cc3d1e77b24b9fdd233b22b6110c00',1,'rb::Motor::speed()']]],
-  ['start_13',['start',['../classrb_1_1Piezo.html#aeb6988392944e06661006fca9dc3a7f9',1,'rb::Piezo']]],
-  ['stop_14',['stop',['../classrb_1_1Piezo.html#a4665cb021c295ac72b80c31ff2c440be',1,'rb::Piezo::stop()'],['../classrb_1_1Timers.html#af887819e53afd268234fb97c412f300c',1,'rb::Timers::stop()']]],
-  ['stupidservo_15',['stupidServo',['../classrb_1_1Manager.html#aa06d922086458baeaecff2a0a3ae218f',1,'rb::Manager']]]
+  ['rad_0',['rad',['../classrb_1_1Angle.html#aea08d0552bfd1962727c758aa122d70f',1,'rb::Angle::rad(_T r)'],['../classrb_1_1Angle.html#ae8ac2b0d2a5a2a03df1759df4a652a32',1,'rb::Angle::rad() const']]],
+  ['red_1',['red',['../classrb_1_1Leds.html#a1cda4fd8310584b208b1ab5db5984ea9',1,'rb::Leds']]],
+  ['requestinfo_2',['requestInfo',['../classrb_1_1Motor.html#a7ed880c17d5cec71cbf4e0b523adaeab',1,'rb::Motor']]],
+  ['reset_3',['reset',['../classrb_1_1Timers.html#a0918e5f0b3dafe8db65cd88d353e49a2',1,'rb::Timers']]],
+  ['resetanglez_4',['resetAngleZ',['../classrb_1_1Mpu.html#a55e784aa71c2ee23c531a0fb8f5af988',1,'rb::Mpu']]],
+  ['right_5',['right',['../classrb_1_1Buttons.html#a411a764a5a1404c7606fdf6cf193af5d',1,'rb::Buttons']]]
 ];

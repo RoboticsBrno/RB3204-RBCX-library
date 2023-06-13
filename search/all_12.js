@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['writeint_0',['writeInt',['../classrb_1_1Nvs.html#aebe618314f0eca3ebc3d55d28d9acd23',1,'rb::Nvs']]],
-  ['writestring_1',['writeString',['../classrb_1_1Nvs.html#ac4e17cd6237f79c6864c0d56ff63efe5',1,'rb::Nvs']]]
+  ['voltage_5fmax_0',['VOLTAGE_MAX',['../classrb_1_1Battery.html#a165d38f448ac4f09e7cb82bd9774bdd2',1,'rb::Battery']]],
+  ['voltage_5fmin_1',['VOLTAGE_MIN',['../classrb_1_1Battery.html#a1b19adacb3a7eea5de1e648bf9a246ed',1,'rb::Battery']]],
+  ['voltagemv_2',['voltageMv',['../classrb_1_1Battery.html#a78c6067b4cd210b40a9b4be0d1fb2256',1,'rb::Battery']]]
 ];

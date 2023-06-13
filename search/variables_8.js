@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['voltage_5fmax_0',['VOLTAGE_MAX',['../classrb_1_1Battery.html#a165d38f448ac4f09e7cb82bd9774bdd2',1,'rb::Battery']]],
-  ['voltage_5fmin_1',['VOLTAGE_MIN',['../classrb_1_1Battery.html#a1b19adacb3a7eea5de1e648bf9a246ed',1,'rb::Battery']]]
+  ['rad_5f2_5fdeg_0',['RAD_2_DEG',['../RBCXMpu_8cpp.html#a75b41723891e402547bdf0959681f1ef',1,'RBCXMpu.cpp']]]
 ];
