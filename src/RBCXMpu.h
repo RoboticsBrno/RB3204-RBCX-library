@@ -2,7 +2,7 @@
 #include "rbcx.pb.h"
 namespace rb {
 
-typedef struct MpuVector {
+struct MpuVector {
     MpuVector()
         : x(0)
         , y(0)
@@ -10,19 +10,19 @@ typedef struct MpuVector {
     float x;
     float y;
     float z;
-} MpuVector;
+};
 
-typedef struct MpuMotion9 {
+struct MpuMotion9 {
     MpuVector accel;
     MpuVector gyro;
     MpuVector angle;
     MpuVector angleAcc;
-} MpuMotion9;
+};
 
-typedef struct MpuMotion6 {
+struct MpuMotion6 {
     MpuVector accel;
     MpuVector gyro;
-} MpuMotion6;
+};
 
 /**
  * \brief Helper class for controlling the Mpu.

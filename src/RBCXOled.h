@@ -37,7 +37,9 @@ public:
     void writeString(
         const char* str, OledFontDef Font, OledColor color = White);
     void writeString(
-        std::string& str, OledFontDef Font, OledColor color = White);
+        const std::string& str, OledFontDef Font, OledColor color = White) {
+        writeString(str, Font, color);
+    }
     void setCursor(uint8_t x, uint8_t y);
     void drawLine(
         uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, OledColor color);

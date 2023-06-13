@@ -66,14 +66,9 @@ void Oled::writeString(const char* str, OledFontDef Font, OledColor color) {
                          .font = CoprocReq_OledFont(Font),
                          .color = CoprocReq_OledColor(color),
                      } } };
-    strncpy(msg.oledCmd.writeString.text, str, 33);
     snprintf(msg.oledCmd.writeString.text, sizeof(msg.oledCmd.writeString.text),
         "%s", str);
     sendOledReq(msg);
-}
-
-void Oled::writeString(std::string& str, OledFontDef Font, OledColor color) {
-    writeString(str.c_str(), Font, color);
 }
 
 void Oled::setCursor(uint8_t x, uint8_t y) {
