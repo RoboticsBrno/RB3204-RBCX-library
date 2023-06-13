@@ -1,4 +1,7 @@
 #pragma once
+
+#include <freertos/FreeRTOS.h>
+
 #include "rbcx.pb.h"
 namespace rb {
 
@@ -58,82 +61,94 @@ public:
     void sendStop();
 
     /**
+     * @brief Records current Gyro and Accelerometer data as "start" position
+     * and subtracts it from future readings
+     */
+    void setCalibrationData();
+
+    /**
+     * @brief Clears the data recorded by setCalibrationData
+     */
+    void clearCalibrationData();
+
+    /**
      * @brief Get the Mpu acceleration data.
-     * @return The Mpu acceleration data.
+     * @return The Mpu acceleration data in Gs.
      */
     MpuVector getAcc();
 
     /**
      * @brief Get the Mpu acceleration data on the X axis.
-     * @return The Mpu acceleration data on the X axis.
+     * @return The Mpu acceleration data on the X axis in Gs.
      */
     float getAccX();
 
     /**
      * @brief Get the Mpu acceleration data on the Y axis.
-     * @return The Mpu acceleration data on the Y axis.
+     * @return The Mpu acceleration data on the Y axis in Gs.
      */
     float getAccY();
 
     /**
      * @brief Get the Mpu acceleration data on the Z axis.
-     * @return The Mpu acceleration data on the Z axis.
+     * @return The Mpu acceleration data on the Z axis in Gs.
      */
     float getAccZ();
 
     /**
      * @brief Get the Mpu gyroscope data.
-     * @return The Mpu gyroscope data.
+     * @return The Mpu gyroscope data in degrees per second.
      */
     MpuVector getGyro();
 
     /**
      * @brief Get the Mpu gyroscope data on the X axis.
-     * @return The Mpu gyroscope data on the X axis.
+     * @return The Mpu gyroscope data on the X axis in degrees per second.
      */
     float getGyroX();
 
     /**
      * @brief Get the Mpu gyroscope data on the Y axis.
-     * @return The Mpu gyroscope data on the Y axis.
+     * @return The Mpu gyroscope data on the Y axis in degrees per second.
      */
     float getGyroY();
 
     /**
      * @brief Get the Mpu gyroscope data on the Z axis.
-     * @return The Mpu gyroscope data on the Z axis.
+     * @return The Mpu gyroscope data on the Z axis in degrees per second.
      */
     float getGyroZ();
 
     /**
      * @brief Get the Mpu angle data.
-     * @return The Mpu angle data.
+     * @return The Mpu angle data in degrees.
      */
     MpuVector getAngle();
 
     /**
      * @brief Get the Mpu angle data on the X axis.
-     * @return The Mpu angle data on the X axis.
+     * @return The Mpu angle data on the X axis in degrees.
      */
     float getAngleX();
 
     /**
      * @brief Get the Mpu angle data on the Y axis.
-     * @return The Mpu angle data on the Y axis.
+     * @return The Mpu angle data on the Y axis in degrees.
      */
     float getAngleY();
 
     /**
      * @brief Get the Mpu angle data on the Z axis.
-     * @return The Mpu angle data on the Z axis.
+     * 
+     * The Z angle is relative to the original heading of the robot at the start of the program,
+     * or after latest resetAngleZ() call, NOT to geographic north.
+     * 
+     * @return The Mpu angle data on the Z axis in degrees.
      */
     float getAngleZ();
 
-    /**
-     * @brief Get the Mpu sending interval.
-     * @return The Mpu sending interval
-     */
-    long getInterval();
+    // Reset heading back to 0
+    void resetAngleZ();
 
     /**
      * @brief Set the Mpu compression coefficient (10 - 20).
@@ -152,10 +167,9 @@ private:
     MpuMotion9 m_mpuMotion;
     MpuMotion6 m_mpuMotionOffset;
 
-    long m_preInterval;
-    int32_t m_interval;
-    bool m_firstRead = true;
-    uint8_t m_compressCoef = 4;
+    TickType_t m_lastTicks;
+
+    uint8_t m_compressCoef;
 
     Mpu();
     Mpu(const Mpu&) = delete;
@@ -166,7 +180,6 @@ private:
     void calculateGyro(const CoprocStat_MpuVector& gyro);
     void calculateAngle();
 
-    void calcOffsets();
     float wrap(float angle, float limit);
 
     void sendMpuReq(CoprocReq_MpuReq mpuReq);

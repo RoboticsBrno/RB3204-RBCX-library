@@ -25,7 +25,9 @@ static constexpr int CALIB_OFFSET_NB_MES = 1;
 
 namespace rb {
 
-Mpu::Mpu() { m_preInterval = xTaskGetTickCount() * portTICK_RATE_MS; }
+Mpu::Mpu() {
+    m_lastTicks = xTaskGetTickCount();
+}
 
 Mpu::~Mpu() {}
 
@@ -57,15 +59,14 @@ void Mpu::setState(const CoprocStat_MpuStat& msg) {
     m_compressCoef = msg.compressCoef;
     calculateAcc(msg.accel);
     calculateGyro(msg.gyro);
-
-    if (m_firstRead) {
-        m_firstRead = false;
-        calcOffsets();
-    }
     calculateAngle();
 }
 
-void Mpu::calcOffsets() {
+void Mpu::clearCalibrationData() {
+    memset(&m_mpuMotionOffset, 0, sizeof(m_mpuMotionOffset));
+}
+
+void Mpu::setCalibrationData() {
     m_mpuMotionOffset.accel.x = m_mpuMotion.accel.x / CALIB_OFFSET_NB_MES;
     m_mpuMotionOffset.accel.y = m_mpuMotion.accel.y / CALIB_OFFSET_NB_MES;
     m_mpuMotionOffset.accel.z
@@ -101,13 +102,10 @@ void Mpu::calculateGyro(const CoprocStat_MpuVector& gyro) {
 }
 
 void Mpu::calculateAngle() {
-    m_mpuMotion.angle.x = 0;
-    m_mpuMotion.angle.y = 0;
-    m_mpuMotion.angle.z = 0;
-
-    float sgZ = (m_mpuMotion.accel.z >= 0)
+    const float sgZ = (m_mpuMotion.accel.z >= 0)
         - (m_mpuMotion.accel.z
             < 0); // allow one angle to go from -180° to +180°
+
     m_mpuMotion.angleAcc.x
         = atan2(m_mpuMotion.accel.y,
               sgZ
@@ -120,31 +118,34 @@ void Mpu::calculateAngle() {
               sqrt(m_mpuMotion.accel.z * m_mpuMotion.accel.z
                   + m_mpuMotion.accel.y * m_mpuMotion.accel.y))
         * RAD_2_DEG; // [- 90°,+ 90°]
-
-    unsigned long Tnew = xTaskGetTickCount() * portTICK_RATE_MS;
-    m_interval = (Tnew - m_preInterval) * 1e-3;
-    m_preInterval = Tnew;
+    
+    const TickType_t curTicks = xTaskGetTickCount();
+    const float elapsedSeconds = float((curTicks  - m_lastTicks) * portTICK_RATE_MS) / 1000.f;
+    m_lastTicks = curTicks;
 
     // Correctly wrap X and Y angles (special thanks to Edgar Bonet!)
     // https://github.com/gabriel-milan/TinyMPU6050/issues/6
     m_mpuMotion.angle.x
         = wrap((m_mpuMotion.angleAcc.x
-                   + wrap(m_mpuMotion.angle.x + m_mpuMotion.gyro.x * m_interval
+                   + wrap( m_mpuMotion.gyro.x * elapsedSeconds
                            - m_mpuMotion.angleAcc.x,
                        180))
                 + m_mpuMotion.angleAcc.x,
             180);
     m_mpuMotion.angle.y = wrap(
         (m_mpuMotion.angleAcc.y
-            + wrap(m_mpuMotion.angle.y + sgZ * m_mpuMotion.gyro.y * m_interval
+            + wrap(sgZ * m_mpuMotion.gyro.y * elapsedSeconds
                     - m_mpuMotion.angleAcc.y,
                 90))
             + m_mpuMotion.angleAcc.y,
         90);
 
-    // angleZ += gyroZ*m_interval; // not wrapped (to do???)
     m_mpuMotion.angle.z
-        += m_mpuMotion.gyro.z * m_interval; // not wrapped (to do???)
+        += m_mpuMotion.gyro.z * elapsedSeconds; // not wrapped (to do???)
+}
+
+void Mpu::resetAngleZ() {
+    m_mpuMotion.angle.z = 0;
 }
 
 /* Wrap an angle in the range [-limit,+limit] (special thanks to Edgar Bonet!) */
@@ -170,8 +171,6 @@ MpuVector Mpu::getAngle() { return m_mpuMotion.angle; }
 float Mpu::getAngleX() { return m_mpuMotion.angle.x; }
 float Mpu::getAngleY() { return m_mpuMotion.angle.y; }
 float Mpu::getAngleZ() { return m_mpuMotion.angle.z; }
-
-long Mpu::getInterval() { return m_interval; }
 
 void Mpu::setCompressCoef(uint8_t coef) {
     sendMpuReq(
