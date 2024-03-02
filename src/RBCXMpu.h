@@ -1,8 +1,12 @@
 #pragma once
 
 #include <freertos/FreeRTOS.h>
+#include <functional>
+#include <vector>
 
 #include "rbcx.pb.h"
+
+
 namespace rb {
 
 struct MpuVector {
@@ -34,6 +38,8 @@ class Mpu {
     friend class Manager;
 
 public:
+    typedef std::function<void(const std::vector<uint8_t>&)> CalibrationDoneCb;
+
     /**
      * @brief Initialize the Mpu. This function must be called before using the Mpu.
      * It will send a request to the coprocessor to initialize the Mpu.
@@ -61,15 +67,29 @@ public:
     void sendStop();
 
     /**
-     * @brief Records current Gyro and Accelerometer data as "start" position
-     * and subtracts it from future readings
+     * @brief Starts MPU calibration procedure
+     * 
+     * If you provide a callback, you can save the data to some persistent storage 
+     * and then use restoreCalibrationData to load them without running the calibration.
      */
-    void setCalibrationData();
+    void calibrateNow(CalibrationDoneCb callback = CalibrationDoneCb());
 
     /**
-     * @brief Clears the data recorded by setCalibrationData
+     * @brief Clears the data recorded by calibrateNow
      */
     void clearCalibrationData();
+
+    /**
+     * @brief Restores calibration data previously obtained from calibrateNow callback
+     */
+    void restoreCalibrationData(const uint8_t *data, size_t length);
+
+    /**
+     * @brief Restores calibration data previously obtained from calibrateNow callback
+     */
+    void restoreCalibrationData(const std::vector<uint8_t>& data) {
+        restoreCalibrationData(data.data(), data.size());
+    }
 
     /**
      * @brief Get the Mpu acceleration data.
@@ -78,77 +98,16 @@ public:
     MpuVector getAcc();
 
     /**
-     * @brief Get the Mpu acceleration data on the X axis.
-     * @return The Mpu acceleration data on the X axis in Gs.
-     */
-    float getAccX();
-
-    /**
-     * @brief Get the Mpu acceleration data on the Y axis.
-     * @return The Mpu acceleration data on the Y axis in Gs.
-     */
-    float getAccY();
-
-    /**
-     * @brief Get the Mpu acceleration data on the Z axis.
-     * @return The Mpu acceleration data on the Z axis in Gs.
-     */
-    float getAccZ();
-
-    /**
      * @brief Get the Mpu gyroscope data.
      * @return The Mpu gyroscope data in degrees per second.
      */
     MpuVector getGyro();
 
     /**
-     * @brief Get the Mpu gyroscope data on the X axis.
-     * @return The Mpu gyroscope data on the X axis in degrees per second.
-     */
-    float getGyroX();
-
-    /**
-     * @brief Get the Mpu gyroscope data on the Y axis.
-     * @return The Mpu gyroscope data on the Y axis in degrees per second.
-     */
-    float getGyroY();
-
-    /**
-     * @brief Get the Mpu gyroscope data on the Z axis.
-     * @return The Mpu gyroscope data on the Z axis in degrees per second.
-     */
-    float getGyroZ();
-
-    /**
      * @brief Get the Mpu angle data.
      * @return The Mpu angle data in degrees.
      */
     MpuVector getAngle();
-
-    /**
-     * @brief Get the Mpu angle data on the X axis.
-     * @return The Mpu angle data on the X axis in degrees.
-     */
-    float getAngleX();
-
-    /**
-     * @brief Get the Mpu angle data on the Y axis.
-     * @return The Mpu angle data on the Y axis in degrees.
-     */
-    float getAngleY();
-
-    /**
-     * @brief Get the Mpu angle data on the Z axis.
-     * 
-     * The Z angle is relative to the original heading of the robot at the start of the program,
-     * or after latest resetAngleZ() call, NOT to geographic north.
-     * 
-     * @return The Mpu angle data on the Z axis in degrees.
-     */
-    float getAngleZ();
-
-    // Reset heading back to 0
-    void resetAngleZ();
 
     /**
      * @brief Set the Mpu compression coefficient (10 - 20).
@@ -164,18 +123,13 @@ public:
     uint8_t getCompressCoef();
 
 private:
-    MpuMotion9 m_mpuMotion;
-    MpuMotion6 m_mpuMotionOffset;
-
-    TickType_t m_lastTicks;
-
-    uint8_t m_compressCoef;
-
     Mpu();
     Mpu(const Mpu&) = delete;
     ~Mpu();
 
     void setState(const CoprocStat_MpuStat& msg);
+    void onCalibrationDone(const MpuCalibrationData& data);
+
     void calculateAcc(const CoprocStat_MpuVector& accel);
     void calculateGyro(const CoprocStat_MpuVector& gyro);
     void calculateAngle();
@@ -183,5 +137,11 @@ private:
     float wrap(float angle, float limit);
 
     void sendMpuReq(CoprocReq_MpuReq mpuReq);
+
+    CalibrationDoneCb m_onCalibrationDoneCallback;
+    MpuMotion9 m_mpuMotion;
+    MpuMotion6 m_mpuMotionOffset;
+    TickType_t m_lastTicks;
+    uint8_t m_compressCoef;
 };
 };
