@@ -26,10 +26,16 @@ void setup() {
     auto& mpu = rb::Manager::get().mpu();
 
     mpu.init();
+
+    // sets the 0 positions to current RBCX orientation
+    mpu.calibrateNow();
+    delay(1000);
+
     mpu.sendStart();
 
     while (true) {
-        printf("MPU - angle: X: %2.2f Y: %2.2f Z: %2.2f\n", mpu.getAngleX(), mpu.getAngleY(), mpu.getAngleZ());
+        auto angle = mpu.getAngle();
+        printf("MPU - angle: X: %2.2f Y: %2.2f Z: %2.2f\n", angle.x, angle.y, angle.z);
         delay(100);
     }
 

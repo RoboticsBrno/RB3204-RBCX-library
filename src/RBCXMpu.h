@@ -6,7 +6,6 @@
 
 #include "rbcx.pb.h"
 
-
 namespace rb {
 
 struct MpuVector {
@@ -82,7 +81,7 @@ public:
     /**
      * @brief Restores calibration data previously obtained from calibrateNow callback
      */
-    void restoreCalibrationData(const uint8_t *data, size_t length);
+    void restoreCalibrationData(const uint8_t* data, size_t length);
 
     /**
      * @brief Restores calibration data previously obtained from calibrateNow callback
