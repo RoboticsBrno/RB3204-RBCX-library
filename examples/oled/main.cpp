@@ -56,7 +56,7 @@ void setup() {
         
         oled.setCursor(5, oled.getHeight()/2);
         String text = "OLED w:" + String(oled.getWidth()) + " | h:" + String(oled.getHeight());
-        oled.writeString(text, rb::Oled::Font_7x10, rb::Oled::White);
+        oled.writeString(text.c_str(), rb::Oled::Font_7x10, rb::Oled::White);
         oled.updateScreen();        
         waitToNextTest();
 

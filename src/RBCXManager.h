@@ -147,6 +147,7 @@ public:
     }
 
     void coprocFwVersionAssert(uint32_t minVersion, const char* name);
+    bool coprocFwAtLeastVersion(uint32_t minVersion);
 
 private:
     Manager();

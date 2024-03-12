@@ -158,6 +158,9 @@ void Manager::consumerRoutine() {
         case CoprocStat_mpuStat_tag:
             m_mpu.setState(msg.payload.mpuStat);
             break;
+        case CoprocStat_mpuCalibrationDone_tag:
+            m_mpu.onCalibrationDone(msg.payload.mpuCalibrationDone);
+            break;
         case CoprocStat_faultStat_tag:
             fault(msg.payload.faultStat);
             break;
@@ -194,13 +197,21 @@ void Manager::sendToCoproc(const CoprocReq& msg) {
     xTaskNotify(m_keepaliveTask, 0, eNoAction);
 }
 
-void Manager::coprocFwVersionAssert(uint32_t minVersion, const char* name) {
+bool Manager::coprocFwAtLeastVersion(uint32_t minVersion) {
     // Ignore zero version number and pass. Might be the cmd was not received yet,
     // but better than to crash in that case.
     if (m_coprocFwVersion.number == 0)
-        return;
+        return true;
 
-    if (minVersion > m_coprocFwVersion.number) {
+    // Ignore dirty versions for development
+    if (m_coprocFwVersion.dirty)
+        return true;
+
+    return minVersion <= m_coprocFwVersion.number;
+}
+
+void Manager::coprocFwVersionAssert(uint32_t minVersion, const char* name) {
+    if (!coprocFwAtLeastVersion(minVersion)) {
         printf("\n\nERROR: Please update your STM32 FW, '%s' requires version "
                "0x%06x and you have 0x%06x!\n\n",
             name, minVersion, m_coprocFwVersion.number);

@@ -8,7 +8,18 @@ jobs:
     strategy:
       matrix:
         example:
-          - examples/motors
+          - battery
+          - buzzer
+          - leds
+          - motorDriveToPosition
+          - motorPower
+          - motors
+          - mpu
+          - oled
+          - readEncoderPosition
+          - stupidServos
+          - ultrasoundBasic
+          - ultrasoundLeds
     steps:
       - uses: actions/checkout@v1
       - name: Set up Python
@@ -20,4 +31,4 @@ jobs:
       - name: Build examples
         run: platformio ci --lib="." --project-conf="./platformio.ini"
         env:
-          PLATFORMIO_CI_SRC: ${{ matrix.example }}
+          PLATFORMIO_CI_SRC: examples/${{ matrix.example }}
