@@ -21,7 +21,7 @@ void setup() {
     man.install();
 
     man.leds().red(true);
-    
+
     auto& oled = rb::Manager::get().oled();
 
     oled.init(rb::Oled::Oled_128x64, true, false);
@@ -53,11 +53,11 @@ void setup() {
         printf("setCursor + writeString\n");
         oled.setCursor(45, 0);
         oled.writeString("OLED", rb::Oled::Font_11x18, rb::Oled::White);
-        
+
         oled.setCursor(5, oled.getHeight()/2);
         String text = "OLED w:" + String(oled.getWidth()) + " | h:" + String(oled.getHeight());
-        oled.writeString(text, rb::Oled::Font_7x10, rb::Oled::White);
-        oled.updateScreen();        
+        oled.writeString(text.c_str(), rb::Oled::Font_7x10, rb::Oled::White);
+        oled.updateScreen();
         waitToNextTest();
 
 
@@ -89,7 +89,7 @@ void setup() {
         for(int i = 5; i< oled.getWidth(); i+=5) {
             oled.drawRectangle(i, 0, i+i, oled.getHeight()-1, rb::Oled::White);
         }
-        oled.updateScreen();      
+        oled.updateScreen();
         waitToNextTest();
 
     }
