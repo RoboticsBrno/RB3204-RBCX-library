@@ -3,6 +3,7 @@
 #include <esp_log.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
+#include <inttypes.h>
 
 #include "RBCXBattery.h"
 #include "RBCXManager.h"
@@ -202,7 +203,7 @@ void Manager::coprocFwVersionAssert(uint32_t minVersion, const char* name) {
 
     if (minVersion > m_coprocFwVersion.number) {
         printf("\n\nERROR: Please update your STM32 FW, '%s' requires version "
-               "0x%06x and you have 0x%06x!\n\n",
+               "0x%06" PRIx32 " and you have 0x%06" PRIx32 "!\n\n",
             name, minVersion, m_coprocFwVersion.number);
         abort();
     }

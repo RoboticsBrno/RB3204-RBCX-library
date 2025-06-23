@@ -1,0 +1,31 @@
+idf_component_register(
+    SRCS
+        "src/RBCXAngle.cpp"
+        "src/RBCXBattery.cpp"
+        "src/RBCXButtons.cpp"
+        "src/RBCXLeds.cpp"
+        "src/RBCXManager.cpp"
+        "src/RBCXMotor.cpp"
+        "src/RBCXMpu.cpp"
+        "src/RBCXNvs.cpp"
+        "src/RBCXOled.cpp"
+        "src/RBCXPiezo.cpp"
+        "src/RBCXSmartServoBusBackend.cpp"
+        "src/RBCXStupidServo.cpp"
+        "src/RBCXTimers.cpp"
+        "src/RBCXUltrasound.cpp"
+    INCLUDE_DIRS
+        "src"
+    REQUIRES
+        freertos
+        esp_common
+        log
+        nvs_flash
+        driver
+        rb3204-rbcx-coproc-comm
+        esp32-lx16a
+    PRIV_REQUIRES
+        soc
+        esp_timer
+        esp_hw_support
+)

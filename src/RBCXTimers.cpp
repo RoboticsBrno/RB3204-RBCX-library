@@ -143,6 +143,6 @@ uint16_t Timers::getFreeIdLocked() {
 }
 
 bool Timers::isOnTimerTask() const {
-    return strcmp(pcTaskGetTaskName(NULL), "esp_timer") == 0;
+    return strcmp(pcTaskGetName(NULL), "esp_timer") == 0;
 }
 };

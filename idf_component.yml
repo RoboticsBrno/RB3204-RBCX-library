@@ -1,0 +1,9 @@
+## IDF Component Manager Manifest File
+dependencies:
+  # Managed components from repositories
+  roboticsbrno/rb3204-rbcx-coproc-comm:
+    git: https://github.com/RoboticsBrno/RB3204-RBCX-coproc-comm.git
+    version: 88260585f73a93af7f7f8717af64ebad5acaa474
+  roboticsbrno/esp32-lx16a:
+    git: https://github.com/RoboticsBrno/Esp32-lx16a.git
+    version: 94b1e5d2f2511df96aa67ca52037b444cda7ecc9

@@ -120,7 +120,7 @@ void Mpu::calculateAngle() {
         * RAD_2_DEG; // [- 90°,+ 90°]
     
     const TickType_t curTicks = xTaskGetTickCount();
-    const float elapsedSeconds = float((curTicks  - m_lastTicks) * portTICK_RATE_MS) / 1000.f;
+    const float elapsedSeconds = float((curTicks  - m_lastTicks) * portTICK_PERIOD_MS) / 1000.f;
     m_lastTicks = curTicks;
 
     // Correctly wrap X and Y angles (special thanks to Edgar Bonet!)
